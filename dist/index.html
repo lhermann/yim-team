@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="de">
+
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>YiM Helfer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+</head>
+
+
+<body>
+
+    <!-- template for the table component -->
+    <script type="text/x-template" id="table-template">
+        <table class="table">
+            <thead class="thead-inverse">
+                <tr>
+                    <th>#</th>
+                    <th>E-Mail</th>
+                    <th>Beschreibung</th>
+                    <th width="120px"><span class="oi oi-cog" title="icon name" aria-hidden="true"></span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item, index) in items" v-bind:class="{ 'table-success': item.eventId }">
+                    <th scope="row">{{ index + 1 }}</th>
+                    <td v-if="item.eventId">
+                        <strong>{{ item.email }}</strong>
+                        <small class="text-success ml-3">{{ item.eventId }}, Lukas Hermann, 23 Jahre</small>
+                    </td>
+                    <td v-else>
+                        <span v-show="!item.editing">{{ item.email }}</span>
+                        <input v-show="item.editing" class="form-control" type="email"
+                            v-model="item.email"
+                            v-on:keyup.enter="doneEdit(item)"
+                            v-on:keyup.esc="cancelEdit(item)">
+                    </td>
+                    <td>
+                        <span v-show="!item.editing">{{ item.label }}</span>
+                        <input v-show="item.editing" class="form-control" type="email"
+                            v-model="item.label"
+                            v-on:keyup.enter="doneEdit(item)"
+                            v-on:keyup.esc="cancelEdit(item)">
+                    </td>
+                    <td class="text-right" v-if="item.eventId"><span class="oi oi-check text-success"></span></td>
+                    <td v-else>
+                        <button type="button" class="btn btn-primary" v-on:click="editItem(item)" v-show="!item.editing"><span class="oi oi-pencil"></span></button>
+                        <button type="button" class="btn btn-primary" v-on:click="doneEdit(item)" v-show="item.editing"><span class="oi oi-check"></span></button>
+                        <button type="button" class="btn btn-danger" v-on:click="removeItem(index)"><span class="oi oi-trash"></span></button>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">{{ items.length + 1 }}</th>
+                    <td>
+                        <input type="email" class="form-control" placeholder="E-Mail" required v-on:keyup.enter="addItem" v-model="email">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" placeholder="Beschreibung" v-on:keyup.enter="addItem" v-model="label">
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-success" v-on:click="addItem"><span class="oi oi-plus"></span></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </script>
+
+
+
+
+
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                YiM-Helfer
+            </a>
+        </div>
+    </nav>
+
+
+    <main id="app" role="main" class="container py-5">
+
+        <h1>Bereich: {{ area }}</h1>
+
+        <div class="alert alert-info" role="alert">
+            <strong>E-Mail:</strong> Eine E-Mail kann für Familien / Kinder mehmals eingetragen werden.
+            <br><strong>Beschreibung:</strong> Wird zusammen mit dem Bereich auf dem Lanyard stehen, bsp: <em>Mitarbeiter – {{ area }}</em>
+        </div>
+
+
+        <h2 class="mt-5">Freipersonen <small class="text-muted">Freier Eintritt</small></h2>
+        <helfer-table label="Freiperson" free-admission="true" food-privelege="false"></helfer-table>
+
+
+        <h2 class="mt-5">Mitarbeiter <small class="text-muted">Freier Eintritt, Volunteer-Schlange</small></h2>
+        <helfer-table label="Mitarbeiter" free-admission="true" food-privelege="true"></helfer-table>
+
+
+        <h2 class="mt-5">Ü-35 <small class="text-muted">Zahlt selbst, Volunteer-Schlange</small></h2>
+        <helfer-table label="Standbetreuer" free-admission="false" food-privelege="true"></helfer-table>
+
+
+        <h2 class="mt-5">Special Volunteers <small class="text-muted">Zahlt selbst, Volunteer-Schlange</small></h2>
+        <helfer-table label="Volunteer" free-admission="false" food-privelege="true"></helfer-table>
+
+
+
+    </main>
+
+    <footer class="bg-dark py-5 text-light text-center">
+
+        <div class="container">
+            <ul class="inline-list">
+                <li>
+                    &copy; 2016 Youth in Misson Congress
+                </li>
+                <li data-delimiter="&middot ">
+                    <a href="/impressum/">Impressum</a>
+                </li>
+                <li data-delimiter="&middot ">
+                    <a href="/datenschutz/">Datenschutzerkl&auml;rung</a>
+                </li>
+            </ul>
+        </div>
+
+    </footer>
+
+
+    <script src="/assets/js/vue.js"></script>
+    <script src="/assets/js/vue-app.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,44 @@
+/* ================ *
+ * MAIN             *
+ * ================ */
+
+.btn {
+    cursor: pointer;
+}
+
+.tooltip-anchor {
+    cursor: default;
+    border-bottom: 1px dotted blue;
+    color: #333;
+    padding: 0 0.2em;
+
+    &:hover {
+        text-decoration: none;
+        color: #333;
+    }
+}
+
+.table td,
+.table th {
+    vertical-align: middle;
+}
+
+.inline-list {
+    margin-bottom: 0;
+
+    > li {
+        display: inline;
+
+        &:not(:last-child):after {
+            content: "\00B7";
+        }
+    }
+}
+
+.tooltip .arrow {
+    top: 50%;
+}
+
+.tooltip[aria-hidden="false"] {
+    opacity: 1;
+}
