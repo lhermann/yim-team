@@ -1,3 +1,11 @@
-.sass-cache
-node_modules
+__pycache__/
+*.sqlite3
+*.swp
+.coverage
 .DS_Store
+.git_server
+.sass-cache
+htmlcov
+node_modules
+YimTeam*
+!yimteam/
