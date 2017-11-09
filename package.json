@@ -6,7 +6,7 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "dev":
-            "concurrently --kill-others -n \"php,sass\" -c \"gray,green.inverse\" \"echo localhost:8007; php -S localhost:8007 -t dist/\" \"node-sass -rw src/scss/ --output dist/assets/css/\"; exit 0"
+            "concurrently --kill-others -n \"php,sass\" -c \"gray,green.inverse\" \"echo localhost:8007; php -S localhost:8007\" \"node-sass -rw src/scss/ --output assets/css/\"; exit 0"
     },
     "author": "Lukas Hermann",
     "license": "ISC",

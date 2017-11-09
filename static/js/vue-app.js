@@ -2,7 +2,26 @@ Vue.component("helfer-table", {
     template: "#table-template",
     data: function() {
         return {
-            items: []
+            items: [
+                {
+                    regId: 1,
+                    email: "lukas@codethink.de",
+                    label: "Label",
+                    editing: false,
+                    firstname: "Lukas",
+                    lastname: "Hermann",
+                    age: 28
+                },
+                {
+                    regId: null,
+                    email: "lukas@codethink.de",
+                    label: "Label",
+                    editing: false,
+                    firstname: null,
+                    lastname: null,
+                    age: null
+                }
+            ]
         };
     },
     props: ["email", "label", "free-admission", "food-privelege"],
@@ -11,7 +30,7 @@ Vue.component("helfer-table", {
             this.items.push({
                 email: this.email,
                 label: this.label,
-                eventId: false,
+                regId: false,
                 editing: false
             });
         },

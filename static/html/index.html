@@ -27,11 +27,11 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(item, index) in items" v-bind:class="{ 'table-success': item.eventId }">
+                <tr v-for="(item, index) in items" v-bind:class="{ 'table-success': item.regId }">
                     <th scope="row">{{ index + 1 }}</th>
-                    <td v-if="item.eventId">
+                    <td v-if="item.regId">
                         <strong>{{ item.email }}</strong>
-                        <small class="text-success ml-3">{{ item.eventId }}, Lukas Hermann, 23 Jahre</small>
+                        <small class="text-success ml-3">{{ item.regId }}, {{ item.firstname }} {{ item.lastname }}, {{ item.age }} Jahre</small>
                     </td>
                     <td v-else>
                         <span v-show="!item.editing">{{ item.email }}</span>
@@ -47,7 +47,7 @@
                             v-on:keyup.enter="doneEdit(item)"
                             v-on:keyup.esc="cancelEdit(item)">
                     </td>
-                    <td class="text-right" v-if="item.eventId"><span class="oi oi-check text-success"></span></td>
+                    <td class="text-right" v-if="item.regId"><span class="oi oi-check text-success"></span></td>
                     <td v-else>
                         <button type="button" class="btn btn-primary" v-on:click="editItem(item)" v-show="!item.editing"><span class="oi oi-pencil"></span></button>
                         <button type="button" class="btn btn-primary" v-on:click="doneEdit(item)" v-show="item.editing"><span class="oi oi-check"></span></button>
@@ -94,19 +94,19 @@
 
 
         <h2 class="mt-5">Freipersonen <small class="text-muted">Freier Eintritt</small></h2>
-        <helfer-table label="Freiperson" free-admission="true" food-privelege="false"></helfer-table>
+        <helfer-table label="Freiperson" free-admission="true" food-privelege="false" above-35="true"></helfer-table>
 
 
         <h2 class="mt-5">Mitarbeiter <small class="text-muted">Freier Eintritt, Volunteer-Schlange</small></h2>
-        <helfer-table label="Mitarbeiter" free-admission="true" food-privelege="true"></helfer-table>
+        <helfer-table label="Mitarbeiter" free-admission="true" food-privelege="true" above-35="true"></helfer-table>
 
 
         <h2 class="mt-5">Ü-35 <small class="text-muted">Zahlt selbst, Volunteer-Schlange</small></h2>
-        <helfer-table label="Standbetreuer" free-admission="false" food-privelege="true"></helfer-table>
+        <helfer-table label="Standbetreuer" free-admission="false" food-privelege="true" above-35="true"></helfer-table>
 
 
         <h2 class="mt-5">Special Volunteers <small class="text-muted">Zahlt selbst, Volunteer-Schlange</small></h2>
-        <helfer-table label="Volunteer" free-admission="false" food-privelege="true"></helfer-table>
+        <helfer-table label="Volunteer" free-admission="false" food-privelege="true" above-35="true"></helfer-table>
 
 
 
