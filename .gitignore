@@ -11,3 +11,4 @@ YimTeam*
 !yimteam/
 config.ini
 index.php
+db.sqlite3

@@ -18,7 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SUPER_DIR = os.path.dirname(BASE_DIR)
 
 config = RawConfigParser()
-config.read(os.path.join(SUPER_DIR, 'yimteam_config.ini'))
+config.read(os.path.join(BASE_DIR, 'config.ini'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -143,9 +143,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Security
 
-SESSION_COOKIE_SECURE = True
-
-CSRF_COOKIE_SECURE = True
+if not DEBUG:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
 
 X_FRAME_OPTIONS = 'DENY'
 
