@@ -44,8 +44,9 @@ class AuthTests(TestCase):
         r = self.client.get(reverse('rest_framework:logout'))
         # View shows a login form
         self.assertContains(r, 'password')
-        # Custom style sheeds
+        # Custom style sheets
         self.assertContains(r, 'open-iconic-bootstrap.min.css')
+        self.assertNotContains(r, 'Django REST framework')
 
 class HelperAPITests(APITestCase):
     dict_new = {
