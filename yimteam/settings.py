@@ -15,7 +15,6 @@ from configparser import RawConfigParser
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SUPER_DIR = os.path.dirname(BASE_DIR)
 
 config = RawConfigParser()
 config.read(os.path.join(BASE_DIR, 'config.ini'))
@@ -180,7 +179,8 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
-STATIC_ROOT = os.path.join(os.path.dirname(SUPER_DIR), 'web-files/yimteam/static')
+STATIC_ROOT = os.path.join(
+    os.path.dirname(os.path.dirname(BASE_DIR)), 'web-files/yimteam/static')
 
 
 # Logging
