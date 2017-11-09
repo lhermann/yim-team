@@ -127,8 +127,6 @@ class HelperAPITests(APITestCase):
         dict_registered = {'url': url.format(2)}
         dict_new.update(self.dict_new)
         dict_registered.update(self.dict_registered)
-        dict_new.pop('id')
-        dict_registered.pop('id')
         self.assertEqual(r.json(), [dict_new, dict_registered])
         factories.HelperFactory()
 

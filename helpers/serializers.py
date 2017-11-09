@@ -20,7 +20,9 @@ fields_registered = (
 class HelperSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Helper
-        exclude = ('user',)
+        fields = ['id', 'url']
+        fields.extend(fields_new)
+        fields.extend(fields_registered)
         read_only_fields = fields_registered
 
 class UnregisteredHelperSerializer(serializers.ModelSerializer):
