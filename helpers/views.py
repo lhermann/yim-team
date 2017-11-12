@@ -2,10 +2,12 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from rest_framework import mixins, viewsets
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.exceptions import MethodNotAllowed, NotFound
 from rest_framework.serializers import ValidationError
 from helpers.models import Helper
 from helpers import permissions, serializers
+from helpers.authentications import TokenAuthentication
 
 @login_required
 def home_view(request):
@@ -99,6 +101,7 @@ class EmailRetrieveSupplementHelperViewSet(mixins.RetrieveModelMixin,
     queryset = Helper.objects.all()
     lookup_url_kwarg = 'email'
     lookup_value_regex = '[-@\.\w]+'
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     serializer_class = serializers.UnregisteredHelperSerializer
     permission_classes = (permissions.WhiteListAndAPIKey,)
 
