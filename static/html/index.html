@@ -22,12 +22,14 @@
                 <tr>
                     <th>#</th>
                     <th>E-Mail</th>
-                    <th>Beschreibung</th>
+                    <th>Title</th>
+                    <th>Essen</span></th>
+                    <th>Ü-35</th>
                     <th width="120px"><span class="oi oi-cog" title="icon name" aria-hidden="true"></span></th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(item, index) in items" v-bind:class="{ 'table-success': item.regId }">
+                <tr v-for="(item, index) in filteredItems" v-bind:class="{ 'table-success': item.regId }">
                     <th scope="row">{{ index + 1 }}</th>
                     <td v-if="item.regId">
                         <strong>{{ item.email }}</strong>
@@ -35,7 +37,7 @@
                     </td>
                     <td v-else>
                         <span v-show="!item.editing">{{ item.email }}</span>
-                        <input v-show="item.editing" class="form-control" type="email"
+                        <input v-show="item.editing" v-validate="'required|email'" :class="{'form-control': true, 'is-invalid': errors.has('email') }" name="email" type="email"
                             v-model="item.email"
                             v-on:keyup.enter="doneEdit(item)"
                             v-on:keyup.esc="cancelEdit(item)">
@@ -47,26 +49,70 @@
                             v-on:keyup.enter="doneEdit(item)"
                             v-on:keyup.esc="cancelEdit(item)">
                     </td>
-                    <td class="text-right" v-if="item.regId"><span class="oi oi-check text-success"></span></td>
+                    <td>
+                        <div v-show="!item.editing">
+                            <span v-if="item.foodPrivilege" class="oi oi-check text-success"></span>
+                            <strong v-else class="text-danger">X</strong>
+                        </div>
+                        <div v-show="item.editing" class="material-switch pull-right">
+                            <input :id="prefix+'-food-'+index" type="checkbox" v-model="item.foodPrivilege"/>
+                            <label :for="prefix+'-food-'+index" class="bg-success"></label>
+                        </div>
+                    </td>
+                    <td>
+                        <div v-show="!item.editing">
+                            <span v-if="item.above35" class="oi oi-check text-success"></span>
+                            <strong v-else class="text-danger">X</strong>
+                        </div>
+                        <div v-show="item.editing" class="material-switch pull-right">
+                            <input :id="prefix+'-35-'+index" type="checkbox" v-model="item.above35"/>
+                            <label :for="prefix+'-35-'+index" class="bg-success"></label>
+                        </div>
+                    </td>
+                    <td v-if="item.regId" class="text-right"><span class="oi oi-check text-success"></span></td>
                     <td v-else>
-                        <button type="button" class="btn btn-primary" v-on:click="editItem(item)" v-show="!item.editing"><span class="oi oi-pencil"></span></button>
-                        <button type="button" class="btn btn-primary" v-on:click="doneEdit(item)" v-show="item.editing"><span class="oi oi-check"></span></button>
-                        <button type="button" class="btn btn-danger" v-on:click="removeItem(index)"><span class="oi oi-trash"></span></button>
+                        <img v-if="axiosBusy" src="/static/img/giphy.gif" height="38">
+                        <span v-else>
+                            <button type="button" class="btn btn-primary" v-on:click="editItem(item)" v-show="!item.editing"><span class="oi oi-pencil"></span></button>
+                            <button type="button" class="btn btn-primary" v-on:click="doneEdit(item)" v-show="item.editing"><span class="oi oi-check"></span></button>
+                            <button type="button" class="btn btn-danger" v-on:click="removeItem(index)"><span class="oi oi-trash"></span></button>
+                        </span>
                     </td>
                 </tr>
                 <tr>
-                    <th scope="row">{{ items.length + 1 }}</th>
+                    <th scope="row">{{ filteredItems.length + 1 }}</th>
                     <td>
-                        <input type="email" class="form-control" placeholder="E-Mail" required v-on:keyup.enter="addItem" v-model="email">
+                        <input v-validate="'required|email'" :class="{'form-control': true, 'is-invalid': errors.has('email') }" type="email" name="email" class="form-control" placeholder="E-Mail" required v-on:keyup.enter="addItem" v-model="email">
+                        <span v-show="errors.has('email')" class="invalid-feedback">{{ errors.first('email') }}</span>
                     </td>
                     <td>
-                        <input type="text" class="form-control" placeholder="Beschreibung" v-on:keyup.enter="addItem" v-model="label">
+                        <input type="text" name="label" class="form-control" placeholder="Beschreibung" v-on:keyup.enter="addItem" v-model="label">
                     </td>
                     <td>
-                        <button type="button" class="btn btn-success" v-on:click="addItem"><span class="oi oi-plus"></span></button>
+                        <div class="material-switch pull-right">
+                            <input :id="prefix+'-food'" type="checkbox" v-model="foodPrivilege"/>
+                            <label :for="prefix+'-food'" class="bg-success"></label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="material-switch pull-right">
+                            <input :id="prefix+'-35'" type="checkbox" v-model="above35"/>
+                            <label :for="prefix+'-35'" class="bg-success"></label>
+                        </div>
+                    </td>
+                    <td>
+                        <img v-if="axiosBusy" src="/static/img/giphy.gif" height="38">
+                        <button v-else type="button" class="btn btn-success" v-on:click="addItem"><span class="oi oi-plus"></span></button>
                     </td>
                 </tr>
             </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6">
+                        <div v-show="axiosError.length" class="alert alert-danger" role="alert">{{ axiosError }}</div>
+                    </td>
+                </tr>
+            </tfoot>
         </table>
     </script>
 
@@ -93,20 +139,12 @@
         </div>
 
 
-        <h2 class="mt-5">Freipersonen <small class="text-muted">Freier Eintritt</small></h2>
-        <helfer-table label="Freiperson" free-admission="true" food-privelege="false" above-35="true"></helfer-table>
+        <h2 class="mt-5">Eintritt Frei</h2>
+        <helfer-table :items="items" :area="area" label-preset="Mitarbeiter" free-admission="true"></helfer-table>
 
 
-        <h2 class="mt-5">Mitarbeiter <small class="text-muted">Freier Eintritt, Volunteer-Schlange</small></h2>
-        <helfer-table label="Mitarbeiter" free-admission="true" food-privelege="true" above-35="true"></helfer-table>
-
-
-        <h2 class="mt-5">Ü-35 <small class="text-muted">Zahlt selbst, Volunteer-Schlange</small></h2>
-        <helfer-table label="Standbetreuer" free-admission="false" food-privelege="true" above-35="true"></helfer-table>
-
-
-        <h2 class="mt-5">Special Volunteers <small class="text-muted">Zahlt selbst, Volunteer-Schlange</small></h2>
-        <helfer-table label="Volunteer" free-admission="false" food-privelege="true" above-35="true"></helfer-table>
+        <h2 class="mt-5">Zahlt selbst</h2>
+        <helfer-table :items="items" :area="area" label-preset="Volunteer" free-admission="false"></helfer-table>
 
 
 
@@ -130,8 +168,11 @@
 
     </footer>
 
-
+    <!-- <script src="/static/js/bundle.js"></script> -->
+    <script src="/static/js/lodash.min.js"></script>
     <script src="/static/js/vue.js"></script>
+    <script src="/static/js/vee-validate.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="/static/js/vue-app.js"></script>
 
 </body>
