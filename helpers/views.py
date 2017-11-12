@@ -29,27 +29,28 @@ class HelperViewSet(viewsets.ModelViewSet):
         """
         Allow same email for multiple entries with equal fields only.
         """
-        fields = serializers.fields_new[1:]
-        excl = {}
+        area = None
         email = data.get('email')
         if email is None:
             email = instance.email
         # There is no instance when creating a helper
         elif instance is not None:
             # Check for all fields which have to be equal if email gets updated
-            excl = {f: getattr(instance, f) for f in fields}
-        # Update old values with new values
-        excl.update({f: data[f] for f in fields if f in data})
-        if excl:
-            qs_incl_instance = Helper.objects.filter(email=email).exclude(**excl)
+            area = getattr(instance, 'area')
+        # Update old value with new value
+        if 'area' in data:
+            area = data['area']
+        if area:
+            qs_incl_inst = Helper.objects.filter(email=email).exclude(area=area)
             if instance is None:
-                deny = qs_incl_instance.exists()
+                deny = qs_incl_inst.exists()
             else:
-                deny = qs_incl_instance.exclude(pk=instance.pk).exists()
+                deny = qs_incl_inst.exclude(pk=instance.pk).exists()
             if deny:
                 message = (
                     'Mit der eMail-Adresse "{}" wurden bereits Helfer '
-                    'mit anderen Angaben eingetragen. Sie müssen übereinstimmen. '
+                    'für einen anderen Bereich eingetragen, der allerdings '
+                    'übereinstimmen muss. '
                     '(Falls in deiner Liste die eMail-Adresse nicht auftaucht, '
                     'wurde sie von einem anderen Benutzer verwendet.)'
                 )

@@ -177,17 +177,17 @@ class HelperAPITests(APITestCase):
         self.client.force_login(self.user)
 
         # Partial update
-        # Change value of object with same email as another object
+        # Change area of object with same email as another object
         dict_new = self.dict_new.copy()
         dict_new.pop('id')
         helper = models.Helper.objects.create(user_id=self.user.id, **dict_new)
         r = self.client.patch(
             reverse('helper-detail', args=(helper.pk,)),
-            {'food_privilege': False},
+            {'area': 'Kitchen'},
             format='json',
         )
         self.assertEqual(r.status_code, 400)
-        # Email that already exists with other values
+        # Email that already exists with other area
         helper = factories.HelperFactory(food_privilege=False, user=self.user)
         r = self.client.patch(
             reverse('helper-detail', args=(helper.pk,)),
