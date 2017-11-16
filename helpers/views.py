@@ -93,6 +93,12 @@ class HelperViewSet(viewsets.ModelViewSet):
             )
         instance.delete()
 
+    def dispatch(self, request, *args, **kwargs):
+        response = super(HelperViewSet, self).dispatch(request, *args, **kwargs)
+        words = self.request.user.username.split('_')
+        response['data-user'] = ' '.join((w.capitalize() for w in words))
+        return response
+
 class EmailRetrieveSupplementHelperViewSet(mixins.RetrieveModelMixin,
                                            mixins.UpdateModelMixin,
                                            viewsets.GenericViewSet):

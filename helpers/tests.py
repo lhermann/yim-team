@@ -118,6 +118,13 @@ class HelperAPITests(APITestCase):
         )
         self.assertEqual(r.status_code, 200)
 
+    def test_username_in_header(self):
+        user = factories.UserFactory(username='auf-_und_abbau')
+        self.client.force_login(user)
+        r = self.client.get(reverse('helper-list'))
+        username = r.get('data-user')
+        self.assertIsNotNone(username)
+        self.assertEqual(username, 'Auf- Und Abbau')
 
     def test_owned_list_get(self):
         self.client.force_login(self.user)
@@ -187,6 +194,16 @@ class HelperAPITests(APITestCase):
             format='json',
         )
         self.assertEqual(r.status_code, 400)
+        # Change value of object with same email as another object
+        dict_new = self.dict_new.copy()
+        dict_new.pop('id')
+        helper = models.Helper.objects.create(user_id=self.user.id, **dict_new)
+        r = self.client.patch(
+            reverse('helper-detail', args=(helper.pk,)),
+            {'food_privilege': False},
+            format='json',
+        )
+        self.assertEqual(r.status_code, 200)
         # Email that already exists with other area
         helper = factories.HelperFactory(food_privilege=False, user=self.user)
         r = self.client.patch(
