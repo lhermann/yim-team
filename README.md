@@ -16,13 +16,19 @@ Create config file
 =====================
 Copy `config.example.ini` as `config.ini` and adjust the database values
 
-Migration
+Deployment
 ============
-`cd` into the base dir (git) and run `npm run migrate` in order to update your database
+cd into base dir
 
-Start the dev server
+`python3 manage.py collectstatic`
+
+`python3 manage.py migrate`
+
+Development
 =======================
-Run `npm run dev`
+Migrate: `npm run migrate`
+
+Start dev server: `npm run dev`
 
 Log in as:
 
