@@ -37,14 +37,19 @@
                     </td>
                     <td v-else>
                         <span v-show="!item.editing">{{ item.email }}</span>
-                        <input v-show="item.editing" v-validate="'required|email'" :class="{'form-control': true, 'is-invalid': errors.has('email') }" name="email" type="email"
+                        <input :class="{'form-control': true, 'is-invalid': false }"
+                            name="email"
+                            type="email"
+                            v-show="item.editing"
                             v-model="item.email"
                             v-on:keyup.enter="doneEdit(item)"
                             v-on:keyup.esc="cancelEdit(item)">
                     </td>
                     <td>
                         <span v-show="!item.editing">{{ item.label }}</span>
-                        <input v-show="item.editing" class="form-control" type="email"
+                        <input class="form-control"
+                            type="email"
+                            v-show="item.editing"
                             v-model="item.label"
                             v-on:keyup.enter="doneEdit(item)"
                             v-on:keyup.esc="cancelEdit(item)">
@@ -82,8 +87,8 @@
                 <tr>
                     <th scope="row">{{ filteredItems.length + 1 }}</th>
                     <td>
-                        <input v-validate="'required|email'" :class="{'form-control': true, 'is-invalid': errors.has('email') }" type="email" name="email" class="form-control" placeholder="E-Mail" required v-on:keyup.enter="addItem" v-model="email">
-                        <span v-show="errors.has('email')" class="invalid-feedback">{{ errors.first('email') }}</span>
+                        <input :class="{'form-control': true, 'is-invalid': false }" type="email" name="email" class="form-control" placeholder="E-Mail" required v-on:keyup.enter="addItem" v-model="email">
+                        <span v-show="false" class="invalid-feedback"></span>
                     </td>
                     <td>
                         <input type="text" name="label" class="form-control" placeholder="Beschreibung" v-on:keyup.enter="addItem" v-model="label">
@@ -125,6 +130,8 @@
             <a class="navbar-brand" href="/">
                 YiM-Helfer
             </a>
+            <a class="btn btn-outline-danger" href="/auth/logout/">Logout</a>
+            <!-- <a class="btn btn-outline-danger" href="/auth/logout/?next=/">Logout</a> -->
         </div>
     </nav>
 
@@ -168,13 +175,11 @@
 
     </footer>
 
-    <!-- <script src="/static/js/bundle.js"></script> -->
     <script src="/static/js/lodash.min.js"></script>
-    <script src="/static/js/vue.js"></script>
-    <script src="/static/js/vee-validate.js"></script>
+    <script src="/static/js/vue.min.js"></script>
     <script src="/static/js/raven.min.js"></script>
     <script>Raven.config('https://0c0f02ef74ce4d5ab4903f39d8382584@sentry.io/240546').install();</script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/static/js/axios.min.js"></script>
     <script src="/static/js/vue-app.js"></script>
 
 </body>

@@ -1,4 +1,4 @@
-A) Create new python executable
+Create new python executable
 ===============================
 1. Get Python 3: https://www.python.org/downloads/
 2. Create a new virtual environment: `python3 -m venv ~/venv/MP1.11`
@@ -8,21 +8,21 @@ MP = My Project, 1.11 = Django 1.11
 
 More info: https://docs.python.org/3.6/library/venv.html
 
-B) Install apps
+Install apps
 ===============
 `pip install -r requirements.txt`
 
-C) Create config file
+Create config file
 =====================
 Copy `config.example.ini` as `config.ini` and adjust the database values
 
-D) Migration
+Migration
 ============
-`cd` into the base dir (git) and run `python3 manage.py migrate` in order to update your database
+`cd` into the base dir (git) and run `npm run migrate` in order to update your database
 
-E) Start the dev server
+Start the dev server
 =======================
-Run `python3 manage.py runserver`
+Run `npm run dev`
 
 Log in as:
 

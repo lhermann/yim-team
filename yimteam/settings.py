@@ -171,6 +171,8 @@ LOGIN_URL = 'rest_framework:login'
 
 LOGIN_REDIRECT_URL = 'home'
 
+LOGOUT_REDIRECT_URL = LOGIN_URL
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/

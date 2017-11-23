@@ -4,20 +4,8 @@ axios.defaults.headers = { "X-Requested-With": "XMLHttpRequest" };
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 
-/* Vue.js
+/* Helpers Component
  **********************/
-
-Vue.use(VeeValidate, {
-    locale: "de",
-    dictionary: {
-        de: {
-            messages: {
-                email: "Muss eine gültige E-Mail-Adresse sein.",
-                required: "Muss eine gültige E-Mail-Adresse sein."
-            }
-        }
-    }
-});
 
 Vue.component("helfer-table", {
     template: "#table-template",
@@ -47,36 +35,70 @@ Vue.component("helfer-table", {
     props: ["items", "area", "label-preset", "free-admission"],
     methods: {
         addItem: function() {
+            console.log("add");
             var component = this;
-            this.$validator.validateAll().then(function(result) {
-                if (result) {
-                    var item = {
-                        email: component.email,
-                        label: component.label,
-                        area: component.area,
-                        freeAdmission: component.freeAdmission === "true",
-                        foodPrivilege: true,
-                        above35: true
-                    };
-                    component.axiosError = "";
-                    component.axiosBusy = true;
-                    axios
-                        .post("/helpers/", camelToSnake(item))
-                        .then(function(response) {
-                            component.axiosBusy = false;
-                            item.editing = false;
-                            item.regId = false;
-                            item.url = response.data.url;
-                            component.items.push(item);
-                            component.email = ""; // empty field
-                        })
-                        .catch(function(error) {
-                            component.axiosBusy = false;
-                            component.axiosError = error.response.data.pop();
-                        });
-                }
-            });
+            var item = {
+                email: component.email,
+                label: component.label,
+                area: component.area,
+                freeAdmission: component.freeAdmission === "true",
+                foodPrivilege: true,
+                above35: true
+            };
+            component.axiosError = "";
+            component.axiosBusy = true;
+            axios
+                .post("/helpers/", camelToSnake(item))
+                .then(function(response) {
+                    component.axiosBusy = false;
+                    item.editing = false;
+                    item.regId = false;
+                    item.url = response.data.url;
+                    component.items.push(item);
+                    component.email = ""; // empty field
+                })
+                .catch(function(error) {
+                    component.axiosBusy = false;
+                    component.axiosError = Object.values(
+                        error.response.data
+                    )[0][0];
+                });
         },
+        // addItem: function() {
+        //     console.log("add");
+        //     var component = this;
+        //     this.$validator.validateAll().then(function(result) {
+        //         console.log(result);
+        //         if (result) {
+        //             var item = {
+        //                 email: component.email,
+        //                 label: component.label,
+        //                 area: component.area,
+        //                 freeAdmission: component.freeAdmission === "true",
+        //                 foodPrivilege: true,
+        //                 above35: true
+        //             };
+        //             component.axiosError = "";
+        //             component.axiosBusy = true;
+        //             axios
+        //                 .post("/helpers/", camelToSnake(item))
+        //                 .then(function(response) {
+        //                     component.axiosBusy = false;
+        //                     item.editing = false;
+        //                     item.regId = false;
+        //                     item.url = response.data.url;
+        //                     component.items.push(item);
+        //                     component.email = ""; // empty field
+        //                 })
+        //                 .catch(function(error) {
+        //                     component.axiosBusy = false;
+        //                     component.axiosError = Object.values(
+        //                         error.response.data
+        //                     )[0][0];
+        //                 });
+        //         }
+        //     });
+        // },
         removeItem: function(index) {
             var item = this.items[index];
             var component = this;
@@ -115,10 +137,11 @@ Vue.component("helfer-table", {
                     item.editing = false;
                 })
                 .catch(function(error) {
-                    console.log(error);
                     component.axiosBusy = false;
                     if (error.response) {
-                        component.axiosError = error.response.data.pop();
+                        component.axiosError = Object.values(
+                            error.response.data
+                        )[0][0];
                         Object.assign(item, component.itemOldState);
                     }
                 });
@@ -126,11 +149,13 @@ Vue.component("helfer-table", {
     }
 });
 
+/* Vue App
+ **********************/
+
 var app = new Vue({
     el: "#app",
     data: {
-        area: "Registrierung",
-        testRoot: "true",
+        area: "",
         items: []
     },
     mounted() {
@@ -142,7 +167,7 @@ var app = new Vue({
                     obj.editing = false;
                 });
                 this.app.items = snakeToCamel(items);
-                this.app.area = items[0].area;
+                this.app.area = response.headers["data-user"];
             })
             .catch(function(error) {
                 console.log(error);
