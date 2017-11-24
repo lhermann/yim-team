@@ -9,6 +9,7 @@ router.register(r'query', views.EmailRetrieveSupplementHelperViewSet, 'query')
 
 urlpatterns = [
     url(r'^$', views.home_view, name='home'),
+    url(r'^impressum.html$', views.impress_view, name='impress'),
     url(r'^', include(router.urls)),
     url(r'auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^maetmiy/', admin.site.urls),

@@ -3,14 +3,25 @@ from django.urls import reverse
 from rest_framework.test import APITestCase, APIClient
 from helpers import factories, models
 
-class HomeTests(TestCase):
+class HTMLTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = factories.UserFactory()
+
     def test_home(self):
         r = self.client.get(reverse('home'))
         self.assertEqual(r.status_code, 302)
-        user = factories.UserFactory()
-        self.client.force_login(user)
+        self.client.force_login(self.user)
         r = self.client.get(reverse('home'))
         self.assertContains(r, 'Mitarbeiter')
+
+    def test_impress(self):
+        r = self.client.get(reverse('impress'))
+        self.assertEqual(r.status_code, 302)
+        user = factories.UserFactory()
+        self.client.force_login(self.user)
+        r = self.client.get(reverse('impress'))
+        self.assertContains(r, '§ 5 TMG')
 
 class AdminTests(TestCase):
     def test_helper_list_view(self):
@@ -41,7 +52,7 @@ class AuthTests(TestCase):
 
     def test_logout_form(self):
         self.client.login(username=self.user.username, password='pw')
-        r = self.client.get(reverse('rest_framework:logout'))
+        r = self.client.get(reverse('rest_framework:logout'), follow=True)
         # View shows a login form
         self.assertContains(r, 'password')
         # Custom style sheets
@@ -119,12 +130,11 @@ class HelperAPITests(APITestCase):
         self.assertEqual(r.status_code, 200)
 
     def test_username_in_header(self):
-        user = factories.UserFactory(username='auf-_und_abbau')
+        user = factories.UserFactory(first_name='Auf- und Abbau')
         self.client.force_login(user)
         r = self.client.get(reverse('helper-list'))
-        username = r.get('data-user')
-        self.assertIsNotNone(username)
-        self.assertEqual(username, 'Auf- Und Abbau')
+        self.assertTrue(r.has_header('data-user'))
+        self.assertEqual(r['data-user'], 'Auf- und Abbau')
 
     def test_owned_list_get(self):
         self.client.force_login(self.user)
