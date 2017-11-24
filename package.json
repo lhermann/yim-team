@@ -5,8 +5,10 @@
     "main": "dist/index.html",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "migrate": "source ~/venv/yimteam1.11/bin/activate && python3 manage.py migrate",
-        "dev": "source ~/venv/yimteam1.11/bin/activate && concurrently --kill-others --raw -n \"py,sass,wbpck\" -c \"gray,green.inverse,blue.inverse\" \"python3 manage.py runserver\" \"node-sass -rw static/_scss/ --output static/css/\" \"webpack --watch\"; exit 0"
+        "migrate":
+            "source ~/venv/yimteam1.11/bin/activate && python3 manage.py migrate && python3 manage.py collectstatic",
+        "dev":
+            "source ~/venv/yimteam1.11/bin/activate && concurrently --kill-others --raw -n \"py,sass,wbpck\" -c \"gray,green.inverse,blue.inverse\" \"python3 manage.py runserver\" \"node-sass -rw static/_scss/ --output static/css/\" \"webpack --watch\"; exit 0"
     },
     "author": "Lukas Hermann",
     "license": "ISC",
