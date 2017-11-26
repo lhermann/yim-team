@@ -29,6 +29,7 @@ class HelperFactory(factory.django.DjangoModelFactory):
     food_privilege = Faker('boolean', chance_of_getting_true=50)
     free_admission = Faker('boolean', chance_of_getting_true=50)
     above_35 = Faker('boolean', chance_of_getting_true=50)
+    t_shirt_size = Faker('text', max_nb_chars=20)
     user = factory.SubFactory(UserFactory)
 
     class Params:

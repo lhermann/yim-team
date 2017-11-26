@@ -33,6 +33,12 @@
 .invalid-feedback {
   position: absolute; }
 
+.u-ellipsis {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; }
+
 /* Material Design Switch
  ********************************/
 .material-switch > input[type="checkbox"] {

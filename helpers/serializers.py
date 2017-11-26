@@ -10,6 +10,7 @@ fields_new = (
     'food_privilege',
     'free_admission',
     'above_35',
+    't_shirt_size'
 )
 fields_registered = (
     'first_name',

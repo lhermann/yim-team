@@ -18,7 +18,21 @@ Vue.component("helfer-table", {
             above35: true,
             axiosBusy: false,
             axiosError: "",
-            itemOldState: {}
+            itemOldState: {},
+            tShirtSizes: [
+                "-",
+                "XL Männlich",
+                "L Männlich",
+                "M Männlich",
+                "S Männlich",
+                "XS Männlich",
+                "XL Lady",
+                "L Lady",
+                "M Lady",
+                "S Lady",
+                "XS Lady"
+            ],
+            tShirtSize: "-"
         };
     },
     computed: {
@@ -38,12 +52,13 @@ Vue.component("helfer-table", {
             console.log("add");
             var component = this;
             var item = {
-                email: component.email,
-                label: component.label,
+                email: _.trim(component.email),
+                label: _.trim(component.label),
                 area: component.area,
                 freeAdmission: component.freeAdmission === "true",
-                foodPrivilege: true,
-                above35: true
+                foodPrivilege: component.foodPrivilege,
+                above35: component.above35,
+                tShirtSize: component.tShirtSize
             };
             component.axiosError = "";
             component.axiosBusy = true;
@@ -55,7 +70,7 @@ Vue.component("helfer-table", {
                     item.regId = false;
                     item.url = response.data.url;
                     component.items.push(item);
-                    component.email = ""; // empty field
+                    component.email = ""; // clear field
                 })
                 .catch(function(error) {
                     component.axiosBusy = false;
@@ -64,41 +79,6 @@ Vue.component("helfer-table", {
                     )[0][0];
                 });
         },
-        // addItem: function() {
-        //     console.log("add");
-        //     var component = this;
-        //     this.$validator.validateAll().then(function(result) {
-        //         console.log(result);
-        //         if (result) {
-        //             var item = {
-        //                 email: component.email,
-        //                 label: component.label,
-        //                 area: component.area,
-        //                 freeAdmission: component.freeAdmission === "true",
-        //                 foodPrivilege: true,
-        //                 above35: true
-        //             };
-        //             component.axiosError = "";
-        //             component.axiosBusy = true;
-        //             axios
-        //                 .post("/helpers/", camelToSnake(item))
-        //                 .then(function(response) {
-        //                     component.axiosBusy = false;
-        //                     item.editing = false;
-        //                     item.regId = false;
-        //                     item.url = response.data.url;
-        //                     component.items.push(item);
-        //                     component.email = ""; // empty field
-        //                 })
-        //                 .catch(function(error) {
-        //                     component.axiosBusy = false;
-        //                     component.axiosError = Object.values(
-        //                         error.response.data
-        //                     )[0][0];
-        //                 });
-        //         }
-        //     });
-        // },
         removeItem: function(index) {
             var item = this.items[index];
             var component = this;
