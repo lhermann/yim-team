@@ -21,16 +21,17 @@ Vue.component("helfer-table", {
             itemOldState: {},
             tShirtSizes: [
                 "-",
-                "XL Männlich",
-                "L Männlich",
-                "M Männlich",
-                "S Männlich",
-                "XS Männlich",
-                "XL Lady",
-                "L Lady",
-                "M Lady",
-                "S Lady",
-                "XS Lady"
+                "S Men",
+                "M Men",
+                "L Men",
+                "XL Men",
+                "XXL Men",
+                "XS Lady Fit",
+                "S Lady Fit",
+                "M Lady Fit",
+                "L Lady Fit",
+                "XL Lady Fit",
+                "XXL Lady Fit"
             ],
             tShirtSize: "-"
         };
