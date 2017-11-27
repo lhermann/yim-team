@@ -3,7 +3,7 @@ from django.urls import reverse
 from rest_framework.test import APITestCase, APIClient
 from helpers import factories, models
 
-class HTMLTests(TestCase):
+class CollectedTests(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.user = factories.UserFactory()
@@ -14,6 +14,19 @@ class HTMLTests(TestCase):
         self.client.force_login(self.user)
         r = self.client.get(reverse('home'))
         self.assertContains(r, 'Mitarbeiter')
+
+    def test_registerseat_api(self):
+        # Log in required
+        r = self.client.get(reverse('registerseat', args=(14, 'Surroundings')))
+        self.assertEqual(r.status_code, 403)
+        self.client.force_login(self.user)
+
+        # Former event with data
+        with self.settings(RS_EVENT_ID=66):
+            r = self.client.get(reverse('registerseat', args=(19, 'maintenance')))
+            self.assertContains(r, 'rg_customfield14')
+            r = self.client.get(reverse('registerseat', args=(21, 'setup')))
+            self.assertEqual(r.status_code, 200)
 
 class AdminTests(TestCase):
     def test_helper_list_view(self):

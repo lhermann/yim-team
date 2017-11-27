@@ -5,3 +5,4 @@ djangorestframework
 pip
 psycopg2
 raven
+requests

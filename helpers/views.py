@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
+import requests
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from rest_framework import mixins, viewsets
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.exceptions import MethodNotAllowed, NotFound
+from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
+from rest_framework.views import APIView
 from helpers.models import Helper
 from helpers import permissions, serializers
 from helpers.authentications import TokenAuthentication
@@ -14,6 +18,27 @@ def home_view(request):
     if request.method == 'GET':
         return render(request, 'index.html')
     raise MethodNotAllowed(request.method)
+
+class RegisterSeatView(APIView):
+    """
+    Reveive API from registerseat.com.
+    """
+    def get(self, request, field, value):
+        post_fields = {
+            'ws': 'get_registrations',
+            'f': 'json',
+            '_auth_t': settings.RS_TOKEN,
+            'eventID': settings.RS_EVENT_ID,
+            'customfield{}'.format(field): value,
+        }
+        if field == 21:
+            post_fields.update({'customfield21_compare': 'like'})
+
+        response = requests.post(
+            url='https://registerseat.com/ws.php',
+            data=post_fields,
+        )
+        return Response(response.json())
 
 class HelperViewSet(viewsets.ModelViewSet):
     """

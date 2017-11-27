@@ -270,3 +270,6 @@ QUERY_WHITE_LIST = tuple(config.get('addresses', 'QUERY_WHITE_LIST').split())
 
 QUERY_API_KEYS = tuple(config.get('secrets', 'QUERY_API_KEYS').split())
 
+RS_TOKEN = config.get('registerseat', 'TOKEN')
+
+RS_EVENT_ID = config.get('registerseat', 'EVENT_ID')
