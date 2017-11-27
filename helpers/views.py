@@ -15,12 +15,6 @@ def home_view(request):
         return render(request, 'index.html')
     raise MethodNotAllowed(request.method)
 
-@login_required
-def impress_view(request):
-    if request.method == 'GET':
-        return render(request, 'impressum.html')
-    raise MethodNotAllowed(request.method)
-
 class HelperViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows helpers to be viewed or edited by the owners.

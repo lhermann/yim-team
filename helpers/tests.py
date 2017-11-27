@@ -15,14 +15,6 @@ class HTMLTests(TestCase):
         r = self.client.get(reverse('home'))
         self.assertContains(r, 'Mitarbeiter')
 
-    def test_impress(self):
-        r = self.client.get(reverse('impress'))
-        self.assertEqual(r.status_code, 302)
-        user = factories.UserFactory()
-        self.client.force_login(self.user)
-        r = self.client.get(reverse('impress'))
-        self.assertContains(r, '§ 5 TMG')
-
 class AdminTests(TestCase):
     def test_helper_list_view(self):
         user = factories.UserFactory(is_superuser=True, is_staff=True)
