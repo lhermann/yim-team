@@ -1,3 +1,24 @@
+var config = {
+    volunteerAreas: {
+        Kongressleitung: {},
+        Küche: { kitchen: "Küche" },
+        Logistik: {
+            maintenance: "Sauberkeit",
+            setup: "Aufbau",
+            teardown: "Abbau"
+        },
+        Musik: {},
+        Öffentlichkeitsarbeit: {},
+        Outreach: {},
+        Programm: { ushers: "Saalordnung" },
+        Registrierung: { registration: "Registrierung" },
+        Sicherheit: { security: "Security", surroundings: "Außenbereich" },
+        Technik: { wsaudio: "Workshop Audio" },
+        "WS & Referenten": {},
+        "YiM-Leben": {}
+    }
+};
+
 /* Set up Axios
  **********************/
 axios.defaults.headers = { "X-Requested-With": "XMLHttpRequest" };
@@ -130,6 +151,62 @@ Vue.component("helfer-table", {
     }
 });
 
+/* Volunteers Component
+ **********************/
+
+Vue.component("volunteer-table", {
+    template: "#volunteer-template",
+    data: function() {
+        return {
+            list: []
+        };
+    },
+    computed: {
+        listSorted: function() {
+            var list = this.list;
+            list.sort(function(a, b) {
+                return a.lastname > b.lastname
+                    ? 1
+                    : b.lastname > a.lastname ? -1 : 0;
+            });
+            return list;
+        },
+        emailListComma: function() {
+            var list = "";
+            this.list.forEach(function(v) {
+                list += v.email + ", ";
+            });
+            return list.substr(0, list.length - 2);
+        }
+    },
+    props: ["area", "label"],
+    methods: {
+        hasPayed: function(volunteer) {
+            return volunteer.payment_date != null;
+        }
+    },
+    mounted() {
+        var component = this,
+            request = "/registerseat/";
+        switch (this.area) {
+            case "setup":
+            case "teardown":
+                request += "10/" + this.area;
+                break;
+            default:
+                request += "14/" + this.area;
+        }
+        axios
+            .get(request)
+            .then(function(response) {
+                component.list = response.data;
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
+    }
+});
+
 /* Vue App
  **********************/
 
@@ -137,6 +214,7 @@ var app = new Vue({
     el: "#app",
     data: {
         area: "",
+        volunteerAreas: {},
         items: []
     },
     mounted() {
@@ -149,6 +227,7 @@ var app = new Vue({
                 });
                 this.app.items = snakeToCamel(items);
                 this.app.area = response.headers["data-user"];
+                this.app.volunteerAreas = config.volunteerAreas[this.app.area];
             })
             .catch(function(error) {
                 console.log(error);

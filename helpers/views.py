@@ -31,8 +31,8 @@ class RegisterSeatView(APIView):
             'eventID': settings.RS_EVENT_ID,
             'customfield{}'.format(field): value,
         }
-        if field == 21:
-            post_fields.update({'customfield21_compare': 'like'})
+        if field == 10:
+            post_fields.update({'customfield10_compare': 'like'})
 
         response = requests.post(
             url='https://registerseat.com/ws.php',

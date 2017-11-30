@@ -18,7 +18,7 @@
     <!-- template for the table component -->
     <script type="text/x-template" id="table-template">
         <table class="table">
-            <thead class="thead-inverse">
+            <thead class="thead-light">
                 <tr>
                     <th>#</th>
                     <th>E-Mail</th>
@@ -125,13 +125,62 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="6">
+                    <td colspan="7">
                         <div v-show="axiosError.length" class="alert alert-danger" role="alert">{{ axiosError }}</div>
                     </td>
                 </tr>
             </tfoot>
         </table>
     </script>
+
+
+
+
+
+
+    <!-- template for the colunteer component -->
+    <script type="text/x-template" id="volunteer-template">
+        <div>
+            <hr>
+            <h3>{{label}}</h3>
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th>#</th>
+                        <th>RegID</th>
+                        <th>Bez.</th>
+                        <th>Name</th>
+                        <th>Alter</th>
+                        <th>E-Mail</th>
+                        <th>Adresse</th>
+                        <th width="90px">T-Shirt</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(v, index) in listSorted" :class="">
+                        <th scope="row">{{ index + 1 }}</th>
+                        <td>{{v.registration_iweekendID}}</td>
+                        <td>
+                            <span v-if="hasPayed(v)" class="oi oi-check text-success"></span>
+                            <span v-else class="oi oi-x text-danger"></span>
+                        </td>
+                        <td>{{v.fullname}}</td>
+                        <td>{{v.rg_age}}</td>
+                        <td>{{v.email}}</td>
+                        <td>{{v.city}}, {{v.ctry_name_en}}</td>
+                        <td><div class="u-ellipsis" style="width: 5em">{{v.customfield15}}</div></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <strong>E-Mail Liste</strong>
+                <textarea class="form-control" rows="3" onclick="this.select()">{{emailListComma}}</textarea>
+            </p>
+        </div>
+    </script>
+
+
+
 
 
 
@@ -149,7 +198,7 @@
 
     <main id="app" role="main" class="container py-5">
 
-        <h1>Bereich: {{ area }}</h1>
+        <h1 class="display-4">Bereich: {{ area }}</h1>
 
         <div class="alert alert-info" role="alert">
             <h3>Info</h3>
@@ -173,7 +222,8 @@
         <h2 class="mt-5">Zahlt selbst</h2>
         <helfer-table :items="items" :area="area" label-preset="Volunteer" free-admission="false"></helfer-table>
 
-
+        <h2 v-if="volunteerAreas" class="mt-5 display-4">Volunteers</h2>
+        <volunteer-table v-for="(a, index) in volunteerAreas" :area="index" :label="a" :key="index"></volunteer-table>
 
     </main>
 
@@ -194,8 +244,8 @@
 
     <script src="/static/js/lodash.min.js"></script>
     <script src="/static/js/vue.js"></script>
-    <script src="/static/js/raven.min.js"></script>
-    <script>Raven.config('https://0c0f02ef74ce4d5ab4903f39d8382584@sentry.io/240546').install();</script>
+    <!-- <script src="/static/js/raven.min.js"></script> -->
+    <!-- <script>Raven.config('https://0c0f02ef74ce4d5ab4903f39d8382584@sentry.io/240546').install();</script> -->
     <script src="/static/js/axios.min.js"></script>
     <script src="/static/js/vue-app.js?2017-11-26_3"></script>
 

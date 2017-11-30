@@ -12,3 +12,5 @@ YimTeam*
 config.ini
 index.php
 db.sqlite3
+db-local.sqlite3
+registerseatapi.txt
