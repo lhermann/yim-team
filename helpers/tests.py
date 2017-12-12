@@ -95,7 +95,10 @@ class HelperAPITests(APITestCase):
     }
 
     api_key = {
-        'x-http-api-key': 'test1234567890',
+        # This doesn't work because in the real world this header name
+        # gets converted to the name below:
+        #'x-http-api-key': 'test1234567890',
+        'HTTP_X_HTTP_API_KEY': 'test1234567890',
     }
 
     @classmethod
