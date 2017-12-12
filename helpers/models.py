@@ -10,6 +10,7 @@ class Helper(models.Model):
     free_admission = models.BooleanField()
     above_35 = models.BooleanField()
     t_shirt_size = models.CharField(max_length=20, blank=True)
+    reg_id = models.PositiveIntegerField(null=True, blank=True)
     first_name = models.CharField(max_length=100, blank=True)
     last_name = models.CharField(max_length=100, blank=True)
     age = models.PositiveSmallIntegerField(null=True, blank=True)

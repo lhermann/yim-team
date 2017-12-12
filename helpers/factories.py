@@ -34,6 +34,7 @@ class HelperFactory(factory.django.DjangoModelFactory):
 
     class Params:
         complete = factory.Trait(
+            reg_id=Faker('random_int', min=1000, max=5000),
             first_name=Faker('first_name'),
             last_name=Faker('last_name'),
             age=Faker('random_int', min=9, max=90),
