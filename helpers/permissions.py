@@ -18,7 +18,7 @@ class WhiteListAndAPIKey(permissions.BasePermission):
 
     def has_permission(self, request, view):
         ip = request.META.get('REMOTE_ADDR')
-        api_key = request.META.get('HTTP_API_KEY')
+        api_key = request.META.get('x-http-api-key')
         white_list = settings.QUERY_WHITE_LIST
         valid_api_keys = settings.QUERY_API_KEYS
         if ip in white_list and api_key in valid_api_keys:

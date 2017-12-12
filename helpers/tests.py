@@ -92,6 +92,10 @@ class HelperAPITests(APITestCase):
         'age': 34,
     }
 
+    api_key = {
+        'x-http-api-key': 'test1234567890',
+    }
+
     @classmethod
     def setUpTestData(cls):
         cls.user = factories.UserFactory()
@@ -115,15 +119,15 @@ class HelperAPITests(APITestCase):
         r = self.client.get(
             reverse('query-detail', args=('new@example.com',)),
             REMOTE_ADDR='127.0.0.1',
-            HTTP_API_KEY='test1234567890',
+            **self.api_key,
         )
         self.assertEqual(r.status_code, 200)
 
         # Wrong IP address
         r = self.client.get(
             reverse('query-detail', args=('new@example.com',)),
-            HTTP_API_KEY='test1234567890',
             REMOTE_ADDR='127.0.0.2',
+            **self.api_key,
         )
         self.assertEqual(r.status_code, 403)
 
@@ -160,21 +164,21 @@ class HelperAPITests(APITestCase):
     def test_query_get_detail(self):
         r = self.client.get(
             reverse('query-detail', args=('new@example.com',)),
-            HTTP_API_KEY='test1234567890',
+            **self.api_key,
         )
         self.assertEqual(r.json(), self.dict_new)
 
         # Helper registered already
         r = self.client.get(
             reverse('query-detail', args=('registered@example.com',)),
-            HTTP_API_KEY='test1234567890',
+            **self.api_key,
         )
         self.assertEqual(r.status_code, 404)
 
         # Email does not exist
         r = self.client.get(
             reverse('query-detail', args=('doesnotexist@example.com',)),
-            HTTP_API_KEY='test1234567890',
+            **self.api_key,
         )
         self.assertEqual(r.status_code, 404)
 
@@ -378,7 +382,7 @@ class HelperAPITests(APITestCase):
         r = self.client.patch(
             '/query/new@example.com/',
             {'email': 'some@thi.ng'},
-            HTTP_API_KEY='test1234567890',
+            **self.api_key,
             format='json',
         )
         exists = models.Helper.objects.filter(email='some@thi.ng').exists()
@@ -388,7 +392,7 @@ class HelperAPITests(APITestCase):
         r = self.client.patch(
             reverse('query-detail', args=('new@example.com',)),
             {'id': 1000},
-            HTTP_API_KEY='test1234567890',
+            **self.api_key,
             format='json',
         )
         self.assertEqual(r.status_code, 200)
@@ -398,7 +402,7 @@ class HelperAPITests(APITestCase):
         r = self.client.patch(
             reverse('query-detail', args=('new@example.com',)),
             {'label': 'something'},
-            HTTP_API_KEY='test1234567890',
+            **self.api_key,
             format='json',
         )
         self.assertEqual(r.status_code, 200)
@@ -408,7 +412,7 @@ class HelperAPITests(APITestCase):
         r = self.client.patch(
             reverse('query-detail', args=('new@example.com',)),
             {'area': 'something else'},
-            HTTP_API_KEY='test1234567890',
+            **self.api_key,
             format='json',
         )
         self.assertEqual(r.status_code, 200)
@@ -418,7 +422,7 @@ class HelperAPITests(APITestCase):
         r = self.client.patch(
             reverse('query-detail', args=('new@example.com',)),
             {'food_privilege': False},
-            HTTP_API_KEY='test1234567890',
+            **self.api_key,
             format='json',
         )
         self.assertEqual(r.status_code, 200)
@@ -429,7 +433,7 @@ class HelperAPITests(APITestCase):
         r = self.client.patch(
             reverse('query-detail', args=('new@example.com',)),
             {'free_admission': False},
-            HTTP_API_KEY='test1234567890',
+            **self.api_key,
             format='json',
         )
         self.assertEqual(r.status_code, 200)
@@ -440,7 +444,7 @@ class HelperAPITests(APITestCase):
         r = self.client.patch(
             reverse('query-detail', args=('new@example.com',)),
             {'above_35': False},
-            HTTP_API_KEY='test1234567890',
+            **self.api_key,
             format='json',
         )
         self.assertEqual(r.status_code, 200)
@@ -451,7 +455,7 @@ class HelperAPITests(APITestCase):
         r = self.client.patch(
             reverse('query-detail', args=('new@example.com',)),
             {'first_name': 'Peter'},
-            HTTP_API_KEY='test1234567890',
+            **self.api_key,
             format='json',
         )
         self.assertEqual(r.status_code, 200)
@@ -462,7 +466,7 @@ class HelperAPITests(APITestCase):
         r = self.client.patch(
             reverse('query-detail', args=('new@example.com',)),
             {'last_name': 'Smith'},
-            HTTP_API_KEY='test1234567890',
+            **self.api_key,
             format='json',
         )
         self.assertEqual(r.status_code, 200)
@@ -475,7 +479,7 @@ class HelperAPITests(APITestCase):
         r = self.client.patch(
             reverse('query-detail', args=('new@example.com',)),
             {'age': 10},
-            HTTP_API_KEY='test1234567890',
+            **self.api_key,
             format='json',
         )
         self.assertEqual(r.status_code, 200)
@@ -486,7 +490,7 @@ class HelperAPITests(APITestCase):
         r = self.client.patch(
             reverse('query-detail', args=('registered@example.com',)),
             {'age': 10},
-            HTTP_API_KEY='test1234567890',
+            **self.api_key,
             format='json',
         )
         self.assertEqual(r.status_code, 404)
@@ -501,7 +505,7 @@ class HelperAPITests(APITestCase):
         r = self.client.put(
             reverse('query-detail', args=('new@example.com',)),
             dict_helper,
-            HTTP_API_KEY='test1234567890',
+            **self.api_key,
             format='json',
         )
         self.assertEqual(r.status_code, 200)
@@ -510,7 +514,7 @@ class HelperAPITests(APITestCase):
         r = self.client.put(
             reverse('query-detail', args=(helper.email,)),
             {'non_existent': True},
-            HTTP_API_KEY='test1234567890',
+            **self.api_key,
             format='json',
         )
         self.assertEqual(r.status_code, 200)
@@ -531,7 +535,7 @@ class HelperAPITests(APITestCase):
         # Not allowed
         r = self.client.delete(
             reverse('query-detail', args=(1,)),
-            HTTP_API_KEY='test1234567890',
+            **self.api_key,
         )
         self.assertEqual(r.status_code, 405)
         deleted = not models.Helper.objects.filter(pk=1).exists()
