@@ -17,120 +17,126 @@
 
     <!-- template for the table component -->
     <script type="text/x-template" id="table-template">
-        <table class="table">
-            <thead class="thead-light">
-                <tr>
-                    <th>#</th>
-                    <th>E-Mail</th>
-                    <th>Titel</th>
-                    <th><abbr title="Darf die Volunteer Schlange verwenden">Essen</abbr></th>
-                    <th>Ü-35</th>
-                    <th width="90px">T-Shirt</th>
-                    <th width="120px"><span class="oi oi-cog"></span></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(item, index) in filteredItems" v-bind:class="{ 'table-success': item.regId }">
-                    <th scope="row">{{ index + 1 }}</th>
-                    <td v-if="item.regId">
-                        <strong>{{ item.email }}</strong>
-                        <small class="text-success ml-3">{{ item.regId }}, {{ item.firstname }} {{ item.lastname }}, {{ item.age }} Jahre</small>
-                    </td>
-                    <td v-else>
-                        <span v-show="!item.editing">{{ item.email }}</span>
-                        <input :class="{'form-control': true, 'is-invalid': false }"
-                            name="email"
-                            type="email"
-                            v-show="item.editing"
-                            v-model="item.email"
-                            v-on:keyup.enter="doneEdit(item)"
-                            v-on:keyup.esc="cancelEdit(item)">
-                    </td>
-                    <td>
-                        <span v-show="!item.editing">{{ item.label }}</span>
-                        <input class="form-control"
-                            type="email"
-                            v-show="item.editing"
-                            v-model="item.label"
-                            v-on:keyup.enter="doneEdit(item)"
-                            v-on:keyup.esc="cancelEdit(item)">
-                    </td>
-                    <td>
-                        <div v-show="!item.editing">
-                            <span v-if="item.foodPrivilege" class="oi oi-check text-success"></span>
-                            <strong v-else class="text-danger">X</strong>
-                        </div>
-                        <div v-show="item.editing" class="material-switch pull-right">
-                            <input :id="prefix+'-food-'+index" type="checkbox" v-model="item.foodPrivilege"/>
-                            <label :for="prefix+'-food-'+index" class="bg-success"></label>
-                        </div>
-                    </td>
-                    <td>
-                        <div v-show="!item.editing">
-                            <span v-if="item.above35" class="oi oi-check text-success"></span>
-                            <strong v-else class="text-danger">X</strong>
-                        </div>
-                        <div v-show="item.editing" class="material-switch pull-right">
-                            <input :id="prefix+'-35-'+index" type="checkbox" v-model="item.above35"/>
-                            <label :for="prefix+'-35-'+index" class="bg-success"></label>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="u-ellipsis" style="width: 5em" v-show="!item.editing">{{item.tShirtSize}}</div>
-                        <select v-show="item.editing" class="form-control" name="tshirt-size" v-model="item.tShirtSize">
-                              <option v-for="size in tShirtSizes">{{size}}</option>
-                        </select>
-                    </td>
-                    <td v-if="item.regId" class="text-right"><span class="oi oi-check text-success"></span></td>
-                    <td v-else>
-                        <img v-if="axiosBusy" src="/static/img/giphy.gif" height="38">
-                        <span v-else>
-                            <button type="button" class="btn btn-primary" v-on:click="editItem(item)" v-show="!item.editing"><span class="oi oi-pencil"></span></button>
-                            <button type="button" class="btn btn-primary" v-on:click="doneEdit(item)" v-show="item.editing"><span class="oi oi-check"></span></button>
-                            <button type="button" class="btn btn-danger" v-on:click="removeItem(index)"><span class="oi oi-trash"></span></button>
-                        </span>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">{{ filteredItems.length + 1 }}</th>
-                    <td>
-                        <input :class="{'form-control': true, 'is-invalid': false }" type="email" name="email" class="form-control" placeholder="E-Mail" required v-on:keyup.enter="addItem" v-model="email">
-                        <span v-show="false" class="invalid-feedback"></span>
-                    </td>
-                    <td>
-                        <input type="text" name="label" class="form-control" placeholder="Beschreibung" v-on:keyup.enter="addItem" v-model="label">
-                    </td>
-                    <td>
-                        <div class="material-switch pull-right">
-                            <input :id="prefix+'-food'" type="checkbox" v-model="foodPrivilege"/>
-                            <label :for="prefix+'-food'" class="bg-success"></label>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="material-switch pull-right">
-                            <input :id="prefix+'-35'" type="checkbox" v-model="above35"/>
-                            <label :for="prefix+'-35'" class="bg-success"></label>
-                        </div>
-                    </td>
-                    <td>
-                        <select class="form-control" name="tshirt-size" v-model="tShirtSize">
-                              <option v-for="size in tShirtSizes">{{size}}</option>
-                        </select>
-                    </td>
-                    <td>
-                        <img v-if="axiosBusy" src="/static/img/giphy.gif" height="38">
-                        <button v-else type="button" class="btn btn-success" v-on:click="addItem"><span class="oi oi-plus"></span></button>
-                    </td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="7">
-                        <div v-show="axiosError.length" class="alert alert-danger" role="alert">{{ axiosError }}</div>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
+        <div class="card">
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th>#</th>
+                        <th>E-Mail</th>
+                        <th>Titel</th>
+                        <th><abbr title="Darf die Volunteer Schlange verwenden">Essen</abbr></th>
+                        <th>Ü-35</th>
+                        <th width="90px">T-Shirt</th>
+                        <th width="120px"><span class="oi oi-cog"></span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(item, index) in filteredItems" v-bind:class="{ 'table-success': item.regId }">
+                        <th scope="row">{{ index + 1 }}</th>
+                        <td v-if="item.regId">
+                            <strong>{{ item.firstName }} {{ item.lastName }}</strong>
+                            <br><small class="text-success">{{ item.email }} &middot; {{ item.age }} Jahre &middot; ID {{ item.regId }}</small>
+                        </td>
+                        <td v-else>
+                            <span v-show="!item.editing">{{ item.email }}</span>
+                            <input :class="{'form-control': true, 'is-invalid': false }"
+                                name="email"
+                                type="email"
+                                v-show="item.editing"
+                                v-model="item.email"
+                                v-on:keyup.enter="doneEdit(item)"
+                                v-on:keyup.esc="cancelEdit(item)">
+                        </td>
+                        <td>
+                            <span v-show="!item.editing">{{ item.label }}</span>
+                            <input class="form-control"
+                                type="email"
+                                v-show="item.editing"
+                                v-model="item.label"
+                                v-on:keyup.enter="doneEdit(item)"
+                                v-on:keyup.esc="cancelEdit(item)">
+                        </td>
+                        <td>
+                            <div v-show="!item.editing">
+                                <span v-if="item.foodPrivilege" class="oi oi-check text-success"></span>
+                                <strong v-else class="text-danger">X</strong>
+                            </div>
+                            <div v-show="item.editing" class="material-switch pull-right">
+                                <input :id="prefix+'-food-'+index" type="checkbox" v-model="item.foodPrivilege"/>
+                                <label :for="prefix+'-food-'+index" class="bg-success"></label>
+                            </div>
+                        </td>
+                        <td>
+                            <div v-show="!item.editing">
+                                <span v-if="item.above35" class="oi oi-check text-success"></span>
+                                <strong v-else class="text-danger">X</strong>
+                            </div>
+                            <div v-show="item.editing" class="material-switch pull-right">
+                                <input :id="prefix+'-35-'+index" type="checkbox" v-model="item.above35"/>
+                                <label :for="prefix+'-35-'+index" class="bg-success"></label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="u-ellipsis" style="width: 5em" v-show="!item.editing">{{item.tShirtSize}}</div>
+                            <select v-show="item.editing" class="form-control" name="tshirt-size" v-model="item.tShirtSize">
+                                  <option v-for="size in tShirtSizes">{{size}}</option>
+                            </select>
+                        </td>
+                        <td v-if="item.regId" class="text-right"><span class="oi oi-check text-success"></span></td>
+                        <td v-else>
+                            <img v-if="axiosBusy" src="/static/img/giphy.gif" height="38">
+                            <span v-else>
+                                <button type="button" class="btn btn-primary" v-on:click="editItem(item)" v-show="!item.editing"><span class="oi oi-pencil"></span></button>
+                                <button type="button" class="btn btn-primary" v-on:click="doneEdit(item)" v-show="item.editing"><span class="oi oi-check"></span></button>
+                                <button type="button" class="btn btn-danger" v-on:click="removeItem(index)"><span class="oi oi-trash"></span></button>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">{{ filteredItems.length + 1 }}</th>
+                        <td>
+                            <input :class="{'form-control': true, 'is-invalid': false }" type="email" name="email" class="form-control" placeholder="E-Mail" required v-on:keyup.enter="addItem" v-model="email">
+                            <span v-show="false" class="invalid-feedback"></span>
+                        </td>
+                        <td>
+                            <input type="text" name="label" class="form-control" placeholder="Beschreibung" v-on:keyup.enter="addItem" v-model="label">
+                        </td>
+                        <td>
+                            <div class="material-switch pull-right">
+                                <input :id="prefix+'-food'" type="checkbox" v-model="foodPrivilege"/>
+                                <label :for="prefix+'-food'" class="bg-success"></label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="material-switch pull-right">
+                                <input :id="prefix+'-35'" type="checkbox" v-model="above35"/>
+                                <label :for="prefix+'-35'" class="bg-success"></label>
+                            </div>
+                        </td>
+                        <td>
+                            <select class="form-control" name="tshirt-size" v-model="tShirtSize">
+                                  <option v-for="size in tShirtSizes">{{size}}</option>
+                            </select>
+                        </td>
+                        <td>
+                            <img v-if="axiosBusy" src="/static/img/giphy.gif" height="38">
+                            <button v-else type="button" class="btn btn-success" v-on:click="addItem"><span class="oi oi-plus"></span></button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="7">
+                            <div v-show="axiosError.length" class="alert alert-danger" role="alert">{{ axiosError }}</div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+            <div class="card-body">
+                <strong>E-Mail Liste</strong>
+                <textarea class="form-control" rows="3" onclick="this.select()">{{emailListComma}}</textarea>
+            </div>
+        </div>
     </script>
 
 
@@ -141,41 +147,42 @@
     <!-- template for the colunteer component -->
     <script type="text/x-template" id="volunteer-template">
         <div>
-            <hr>
             <h3>{{label}}</h3>
-            <table class="table">
-                <thead class="thead-light">
-                    <tr>
-                        <th>#</th>
-                        <th>RegID</th>
-                        <th>Bez.</th>
-                        <th>Name</th>
-                        <th>Alter</th>
-                        <th>E-Mail</th>
-                        <th>Adresse</th>
-                        <th width="90px">T-Shirt</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(v, index) in listSorted" :class="">
-                        <th scope="row">{{ index + 1 }}</th>
-                        <td>{{v.registration_iweekendID}}</td>
-                        <td>
-                            <span v-if="hasPayed(v)" class="oi oi-check text-success"></span>
-                            <span v-else class="oi oi-x text-danger"></span>
-                        </td>
-                        <td>{{v.fullname}}</td>
-                        <td>{{v.rg_age}}</td>
-                        <td>{{v.email}}</td>
-                        <td>{{v.city}}, {{v.ctry_name_en}}</td>
-                        <td><div class="u-ellipsis" style="width: 5em">{{v.customfield15}}</div></td>
-                    </tr>
-                </tbody>
-            </table>
-            <p>
-                <strong>E-Mail Liste</strong>
-                <textarea class="form-control" rows="3" onclick="this.select()">{{emailListComma}}</textarea>
-            </p>
+            <div class="card mb-5">
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>#</th>
+                            <th>RegID</th>
+                            <th>Bez.</th>
+                            <th>Name</th>
+                            <th>Alter</th>
+                            <th>E-Mail</th>
+                            <th>Adresse</th>
+                            <th width="90px">T-Shirt</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(v, index) in listSorted" :class="">
+                            <th scope="row">{{ index + 1 }}</th>
+                            <td>{{v.registration_iweekendID}}</td>
+                            <td>
+                                <span v-if="hasPayed(v)" class="oi oi-check text-success"></span>
+                                <span v-else class="oi oi-x text-danger"></span>
+                            </td>
+                            <td>{{v.fullname}}</td>
+                            <td>{{v.rg_age}}</td>
+                            <td>{{v.email}}</td>
+                            <td>{{v.city}}, {{v.ctry_name_en}}</td>
+                            <td><div class="u-ellipsis" style="width: 5em">{{v.customfield15}}</div></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="card-body">
+                    <strong>E-Mail Liste</strong>
+                    <textarea class="form-control" rows="3" onclick="this.select()">{{emailListComma}}</textarea>
+                </div>
+            </div>
         </div>
     </script>
 
@@ -214,7 +221,6 @@
             </ul>
         </div>
 
-
         <h2 class="mt-5">Eintritt Frei</h2>
         <helfer-table :items="items" :area="area" label-preset="Mitarbeiter" free-admission="true"></helfer-table>
 
@@ -223,6 +229,7 @@
         <helfer-table :items="items" :area="area" label-preset="Volunteer" free-admission="false"></helfer-table>
 
         <h2 v-if="volunteerAreas" class="mt-5 display-4">Volunteers</h2>
+        <hr>
         <volunteer-table v-for="(a, index) in volunteerAreas" :area="index" :label="a" :key="index"></volunteer-table>
 
     </main>
@@ -247,7 +254,7 @@
     <script src="/static/js/raven.min.js"></script>
     <script>Raven.config('https://0c0f02ef74ce4d5ab4903f39d8382584@sentry.io/240546').install();</script>
     <script src="/static/js/axios.min.js"></script>
-    <script src="/static/js/vue-app.js?2017-11-30"></script>
+    <script src="/static/js/vue-app.js?2018-01-22-2"></script>
 
 </body>
 

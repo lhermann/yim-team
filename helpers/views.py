@@ -13,8 +13,6 @@ from helpers.models import Helper
 from helpers import permissions, serializers
 from helpers.authentications import TokenAuthentication
 
-from pprint import pprint
-
 @login_required
 def home_view(request):
     if request.method == 'GET':

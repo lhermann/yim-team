@@ -66,6 +66,13 @@ Vue.component("helfer-table", {
         },
         prefix: function() {
             return this.freeAdmission == "true" ? "frei" : "zahlt";
+        },
+        emailListComma: function() {
+            var list = "";
+            this.filteredItems.forEach(function(v) {
+                list += v.email + ", ";
+            });
+            return list.substr(0, list.length - 2);
         }
     },
     props: ["items", "area", "label-preset", "free-admission"],
@@ -182,7 +189,10 @@ Vue.component("volunteer-table", {
     props: ["area", "label"],
     methods: {
         hasPayed: function(volunteer) {
-            return volunteer.payment_date != null;
+            return (
+                volunteer.amount_to_pay == "0.00" ||
+                volunteer.payment_date != null
+            );
         }
     },
     mounted() {
@@ -237,24 +247,6 @@ var app = new Vue({
 
 /* Helper Functions
  **********************/
-
-//Cookie:sessionid=7vbxih5nlwpgqxcwdndg5zk11n6pdy15; csrftoken=wJtZEH1wRQUzJC5k9VJbzk7Cl0vRqNflPS9bnMWb7o9bJQgPkYwvkbV9r52Cdh7m
-//Cookie:sessionid=7vbxih5nlwpgqxcwdndg5zk11n6pdy15; csrftoken=wJtZEH1wRQUzJC5k9VJbzk7Cl0vRqNflPS9bnMWb7o9bJQgPkYwvkbV9r52Cdh7m
-
-// Test
-// var object = { snake_case_index: "test value", camelCaseIndex: "test value" };
-// console.log(manipulateCase(object, "camel"));
-// var obj = {
-//     email: "abc@gmail.com",
-//     label: "Some Nice Label",
-//     area: "TEST",
-//     freeAdmission: true,
-//     foodPrivilege: true,
-//     above35: true
-// };
-// axios.post("/helpers/", camelToSnake(obj)).then(function(response) {
-//     console.log(response);
-// });
 
 function snakeToCamel(input) {
     return manipulateCase(input, "camel");
