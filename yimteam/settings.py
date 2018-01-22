@@ -225,7 +225,7 @@ LOGGING = {
         },
         'sentry': {
             # Decide here what to capture: ERROR, WARNING, INFO, etc.
-            'level': 'WARNING',
+            'level': 'ERROR',
             'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
             'tags': {'custom-tag': 'log'},
         },
