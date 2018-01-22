@@ -37,6 +37,5 @@ class HelperFactory(factory.django.DjangoModelFactory):
             reg_id=Faker('random_int', min=1000, max=5000),
             first_name=Faker('first_name'),
             last_name=Faker('last_name'),
-            age=Faker('random_int', min=9, max=90),
-            t_shirt_size=Faker('text', max_nb_chars=20),
+            age=Faker('random_int', min=9, max=90)
         )
