@@ -229,7 +229,7 @@
         <helfer-table :items="items" :area="area" label-preset="Volunteer" free-admission="false"></helfer-table>
 
         <h2 v-if="volunteerAreas" class="mt-5 display-4">Volunteers</h2>
-        <hr>
+        <hr v-if="volunteerAreas">
         <volunteer-table v-for="(a, index) in volunteerAreas" :area="index" :label="a" :key="index"></volunteer-table>
 
     </main>
