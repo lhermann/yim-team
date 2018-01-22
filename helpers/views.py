@@ -13,6 +13,8 @@ from helpers.models import Helper
 from helpers import permissions, serializers
 from helpers.authentications import TokenAuthentication
 
+from pprint import pprint
+
 @login_required
 def home_view(request):
     if request.method == 'GET':
@@ -31,8 +33,11 @@ class RegisterSeatView(APIView):
             'eventID': settings.RS_EVENT_ID,
             'customfield{}'.format(field): value,
         }
-        if field == 10:
-            post_fields.update({'customfield10_compare': 'like'})
+        if field == '10':
+            post_fields.update({
+                'customfield10_compare': 'like',
+                'customfield10': '%' + value + '%',
+            })
 
         response = requests.post(
             url='https://registerseat.com/ws.php',

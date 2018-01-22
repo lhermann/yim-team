@@ -17,6 +17,7 @@ fields_registered = (
     'first_name',
     'last_name',
     'age',
+    't_shirt_size'
 )
 
 class HelperSerializer(serializers.HyperlinkedModelSerializer):
