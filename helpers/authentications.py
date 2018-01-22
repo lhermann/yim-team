@@ -8,7 +8,7 @@ class TokenAuthentication(BaseAuthentication):
     """
     Simple token based authentication.
 
-    Clients should authenticate by passing the token key in the "HTTP_API_KEY"
+    Clients should authenticate by passing the token key in the "x-http-api-key"
     HTTP header.
     """
     def authenticate(self, request):
@@ -20,7 +20,7 @@ class TokenAuthentication(BaseAuthentication):
                 'You have to provide QUERY_WHITE_LIST and QUERY_API_KEYS as '
                 'tuples or lists in the project\'s settings.py.'
             )
-        api_key = request.META.get('HTTP_API_KEY')
+        api_key = request.META.get('HTTP_X_HTTP_API_KEY')
 
         if not api_key:
             return None
