@@ -16,7 +16,8 @@ fields_registered = (
     'reg_id',
     'first_name',
     'last_name',
-    'age'
+    'age',
+    't_shirt_size'
 )
 
 class HelperSerializer(serializers.HyperlinkedModelSerializer):
@@ -25,10 +26,22 @@ class HelperSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['id', 'url']
         fields.extend(fields_new)
         fields.extend(fields_registered)
-        read_only_fields = fields_registered
+        read_only_fields = (
+            'reg_id',
+            'first_name',
+            'last_name',
+            'age',
+        )
 
 class UnregisteredHelperSerializer(serializers.ModelSerializer):
     class Meta:
         model = Helper
         exclude = ('user',)
-        read_only_fields = fields_new
+        read_only_fields = (
+            'email',
+            'label',
+            'area',
+            'food_privilege',
+            'free_admission',
+            'above_35',
+        )

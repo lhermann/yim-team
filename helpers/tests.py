@@ -506,6 +506,8 @@ class HelperAPITests(APITestCase):
             'first_name': 'Timmy',
             'last_name': 'Jonson',
             'age': 34,
+            'reg_id': 2000,
+            't_shirt_size': 'M',
         }
         r = self.client.put(
             reverse('query-detail', args=('new@example.com',)),
