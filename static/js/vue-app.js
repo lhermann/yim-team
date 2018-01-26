@@ -108,9 +108,9 @@ Vue.component("helfer-table", {
                     )[0][0];
                 });
         },
-        removeItem: function(index) {
-            var item = this.items[index];
+        removeItem: function(item) {
             var component = this;
+            var index = component.items.indexOf(item);
             if (confirm(item.email + " löschen?")) {
                 this.axiosError = "";
                 this.axiosBusy = true;

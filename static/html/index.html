@@ -88,7 +88,7 @@
                             <span v-else>
                                 <button type="button" class="btn btn-primary" v-on:click="editItem(item)" v-show="!item.editing"><span class="oi oi-pencil"></span></button>
                                 <button type="button" class="btn btn-primary" v-on:click="doneEdit(item)" v-show="item.editing"><span class="oi oi-check"></span></button>
-                                <button type="button" class="btn btn-danger" v-on:click="removeItem(index)"><span class="oi oi-trash"></span></button>
+                                <button type="button" class="btn btn-danger" v-on:click="removeItem(item)"><span class="oi oi-trash"></span></button>
                             </span>
                         </td>
                     </tr>
@@ -251,8 +251,8 @@
 
     <script src="/static/js/lodash.min.js"></script>
     <script src="/static/js/vue.js"></script>
-    <script src="/static/js/raven.min.js"></script>
-    <script>Raven.config('https://0c0f02ef74ce4d5ab4903f39d8382584@sentry.io/240546').install();</script>
+    <!-- <script src="/static/js/raven.min.js"></script>
+    <script>Raven.config('https://0c0f02ef74ce4d5ab4903f39d8382584@sentry.io/240546').install();</script> -->
     <script src="/static/js/axios.min.js"></script>
     <script src="/static/js/vue-app.js?2018-01-22-2"></script>
 
