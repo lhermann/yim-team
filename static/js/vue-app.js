@@ -214,6 +214,14 @@ Vue.component("volunteer-table", {
             .catch(function(error) {
                 console.log(error);
             });
+        axios
+            .get("/registerseat/reg_id/8539")
+            .then(function(response) {
+                console.log(response);
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
     }
 });
 

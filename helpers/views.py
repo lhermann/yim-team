@@ -12,6 +12,9 @@ from rest_framework.views import APIView
 from helpers.models import Helper
 from helpers import permissions, serializers
 from helpers.authentications import TokenAuthentication
+# Added by Lukas
+import numbers
+from pprint import pprint
 
 @login_required
 def home_view(request):
@@ -29,13 +32,27 @@ class RegisterSeatView(APIView):
             'f': 'json',
             '_auth_t': settings.RS_TOKEN,
             'eventID': settings.RS_EVENT_ID,
-            'customfield{}'.format(field): value,
+            # 'customfield{}'.format(field): value,
         }
+
+        if field.isdigit():
+            post_fields.update({
+                'customfield{}'.format(field): value,
+            })
+
         if field == '10':
             post_fields.update({
                 'customfield10_compare': 'like',
                 'customfield10': '%' + value + '%',
             })
+
+        if field == 'reg_id':
+            post_fields.update({
+                # query the reg_id
+                # 'registration_iweekendID': value,
+            })
+
+        pprint(post_fields);
 
         response = requests.post(
             url='https://registerseat.com/ws.php',
