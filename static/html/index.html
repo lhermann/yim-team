@@ -173,7 +173,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(v, index) in listSorted" :class="">
+                        <tr v-for="(v, index) in listSorted" :class="{ 'table-success': hasPayed(v) }">
                             <th scope="row">{{ index + 1 }}</th>
                             <td>{{v.registration_iweekendID}}</td>
                             <td>
