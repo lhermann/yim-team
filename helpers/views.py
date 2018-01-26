@@ -99,15 +99,19 @@ class HelperViewSet(viewsets.ModelViewSet):
         Disallow edit on registered helpers.
         """
         self.email_check(serializer.validated_data, serializer.instance)
+
+        """
+        Disallowing edit on registered helpers is now disabled
+        """
         # Registered helpers validation
-        deny = Helper.objects.filter(pk=self.kwargs['pk']).filter(
-                last_name__regex=r'^.+').exists()
-        if deny:
-            message = (
-                'Dieser Helfer hat sich bereits angemeldet. Daher können '
-                'keine Änderungen mehr erfolgen.'
-            )
-            raise ValidationError(message)
+        # deny = Helper.objects.filter(pk=self.kwargs['pk']).filter(
+        #         last_name__regex=r'^.+').exists()
+        # if deny:
+        #     message = (
+        #         'Dieser Helfer hat sich bereits angemeldet. Daher können '
+        #         'keine Änderungen mehr erfolgen.'
+        #     )
+        #     raise ValidationError(message)
         serializer.save()
 
     def perform_destroy(self, instance):

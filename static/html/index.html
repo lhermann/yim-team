@@ -48,13 +48,16 @@
                                 v-on:keyup.esc="cancelEdit(item)">
                         </td>
                         <td>
-                            <span v-show="!item.editing">{{ item.label }}</span>
-                            <input class="form-control"
-                                type="email"
-                                v-show="item.editing"
-                                v-model="item.label"
-                                v-on:keyup.enter="doneEdit(item)"
-                                v-on:keyup.esc="cancelEdit(item)">
+                            <span v-show="!item.editing">{{ item.label }} - {{ area }}</span>
+                            <div v-show="item.editing" class="form-inline">
+                                <input class="form-control"
+                                    type="email"
+                                    v-show="item.editing"
+                                    v-model="item.label"
+                                    v-on:keyup.enter="doneEdit(item)"
+                                    v-on:keyup.esc="cancelEdit(item)">
+                                <span class="mx-1"> - {{ area }}</span>
+                            </div>
                         </td>
                         <td>
                             <div v-show="!item.editing">
@@ -66,12 +69,12 @@
                                 <label :for="prefix+'-food-'+index" class="bg-success"></label>
                             </div>
                         </td>
-                        <td>
-                            <div v-show="!item.editing">
-                                <span v-if="item.above35" class="oi oi-check text-success"></span>
-                                <strong v-else class="text-danger">X</strong>
-                            </div>
-                            <div v-show="item.editing" class="material-switch pull-right">
+                        <td v-if="item.regId || !item.editing">
+                            <span v-if="item.above35" class="oi oi-check text-success"></span>
+                            <strong v-else class="text-danger">X</strong>
+                        </td>
+                        <td v-else>
+                            <div class="material-switch pull-right">
                                 <input :id="prefix+'-35-'+index" type="checkbox" v-model="item.above35"/>
                                 <label :for="prefix+'-35-'+index" class="bg-success"></label>
                             </div>
@@ -82,14 +85,18 @@
                                   <option v-for="size in tShirtSizes">{{size}}</option>
                             </select>
                         </td>
-                        <td v-if="item.regId" class="text-right"><span class="oi oi-check text-success"></span></td>
+                        <td v-if="axiosBusy">
+                            <img src="/static/img/giphy.gif" height="38">
+                        </td>
+                        <td v-else-if="item.regId">
+                            <button type="button" class="btn btn-primary" v-on:click="editItem(item)" v-show="!item.editing"><span class="oi oi-pencil"></span></button>
+                            <button type="button" class="btn btn-primary" v-on:click="doneEdit(item)" v-show="item.editing"><span class="oi oi-check"></span></button>
+                            <span class="oi oi-check text-success ml-3"></span>
+                        </td>
                         <td v-else>
-                            <img v-if="axiosBusy" src="/static/img/giphy.gif" height="38">
-                            <span v-else>
-                                <button type="button" class="btn btn-primary" v-on:click="editItem(item)" v-show="!item.editing"><span class="oi oi-pencil"></span></button>
-                                <button type="button" class="btn btn-primary" v-on:click="doneEdit(item)" v-show="item.editing"><span class="oi oi-check"></span></button>
-                                <button type="button" class="btn btn-danger" v-on:click="removeItem(item)"><span class="oi oi-trash"></span></button>
-                            </span>
+                            <button type="button" class="btn btn-primary" v-on:click="editItem(item)" v-show="!item.editing"><span class="oi oi-pencil"></span></button>
+                            <button type="button" class="btn btn-primary" v-on:click="doneEdit(item)" v-show="item.editing"><span class="oi oi-check"></span></button>
+                            <button type="button" class="btn btn-danger" v-on:click="removeItem(item)"><span class="oi oi-trash"></span></button>
                         </td>
                     </tr>
                     <tr>
@@ -99,7 +106,10 @@
                             <span v-show="false" class="invalid-feedback"></span>
                         </td>
                         <td>
-                            <input type="text" name="label" class="form-control" placeholder="Beschreibung" v-on:keyup.enter="addItem" v-model="label">
+                            <div class="form-inline">
+                                <input class="form-control" type="text" name="label" placeholder="Beschreibung" v-on:keyup.enter="addItem" v-model="label">
+                                <span class="mx-1"> - {{ area }}</span>
+                            </div>
                         </td>
                         <td>
                             <div class="material-switch pull-right">
