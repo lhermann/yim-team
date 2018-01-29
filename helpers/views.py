@@ -13,7 +13,6 @@ from helpers.models import Helper
 from helpers import permissions, serializers
 from helpers.authentications import TokenAuthentication
 # Added by Lukas
-import numbers
 from pprint import pprint
 
 @login_required
