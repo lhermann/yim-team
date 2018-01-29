@@ -378,6 +378,34 @@ class HelperAPITests(APITestCase):
         )
         self.assertEqual(r.status_code, 400)
 
+    def test_query_with_capitel_letters_get(self):
+        r = self.client.get(
+            reverse('query-detail', args=('New@Example.com',)),
+            **self.api_key,
+            format='json',
+        )
+        self.assertEqual(r.status_code, 200)
+
+    def test_query_with_capitel_letters_patch(self):
+        r = self.client.patch(
+            reverse('query-detail', args=('NEW@example.com',)),
+            {'first_name': 'NEW'},
+            **self.api_key,
+            format='json',
+        )
+        exists = models.Helper.objects.filter(first_name='NEW').exists()
+        self.assertTrue(exists)
+        self.assertEqual(r.status_code, 200)
+
+    def test_query_db_value_with_capitel_letters(self):
+        helper = factories.HelperFactory(email='CAPITAL@EXAMPLE.COM')
+        r = self.client.get(
+            reverse('query-detail', args=('capital@example.com',)),
+            **self.api_key,
+            format='json',
+        )
+        self.assertEqual(r.status_code, 200)
+
     def test_query_update(self):
         # Second entry with same email
         helper = factories.HelperFactory(email='new@example.com')

@@ -145,7 +145,10 @@ class EmailRetrieveSupplementHelperViewSet(mixins.RetrieveModelMixin,
         Return the first matching object because email is not unique.
         """
         queryset = self.get_queryset()
-        queryset = queryset.filter(email=self.kwargs['email'], last_name='')
+        queryset = queryset.filter(
+            email__iexact=self.kwargs['email'],
+            last_name='',
+        )
         try:
             obj = queryset[0]
         except IndexError:
