@@ -238,6 +238,8 @@ class HelperAPITests(APITestCase):
             format='json',
         )
         self.assertEqual(r.status_code, 400)
+        msg = 'Mit der eMail-Adresse "registered@example.com" wurden ber'
+        self.assertEqual(r.json()[0][:len(msg)], msg)
         # Email
         r = self.client.patch(
             '/helpers/1/',
@@ -376,7 +378,7 @@ class HelperAPITests(APITestCase):
             dict_registered,
             format='json',
         )
-        self.assertEqual(r.status_code, 400)
+        self.assertEqual(r.status_code, 200)
 
     def test_query_with_capitel_letters_get(self):
         r = self.client.get(
