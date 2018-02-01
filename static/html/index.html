@@ -51,7 +51,7 @@
                             <span v-show="!item.editing">{{ item.label }} - {{ area }}</span>
                             <div v-show="item.editing" class="form-inline">
                                 <input class="form-control"
-                                    type="email"
+                                    type="text"
                                     v-show="item.editing"
                                     v-model="item.label"
                                     v-on:keyup.enter="doneEdit(item)"
