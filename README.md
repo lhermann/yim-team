@@ -1,28 +1,11 @@
-Create new python executable
+Create new Python executable and install Python packages
 ===============================
-1. Get Python 3: https://www.python.org/downloads/
-2. Create a new virtual environment: `python3 -m venv ~/venv/MP1.11`
-3. Activate it: `source ~/venv/MP1.11/bin/activate`
-
-MP = My Project, 1.11 = Django 1.11
-
-More info: https://docs.python.org/3.6/library/venv.html
-
-Install apps
-===============
-`pip install -r requirements.txt`
+`pipenv sync`
 
 Create config file
 =====================
 Copy `config.example.ini` as `config.ini` and adjust the database values
 
-Deployment
-============
-cd into base dir
-
-`python3 manage.py collectstatic`
-
-`python3 manage.py migrate`
 
 Development
 =======================

@@ -1,8 +1,0 @@
-Django>1.11,<2.0
-django-factory-boy
-django-uwsgi
-djangorestframework
-pip
-psycopg2
-raven
-requests

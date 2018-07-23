@@ -6,11 +6,11 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "migrate":
-            "source ~/venv/yimteam/bin/activate && pip install -r requirements.txt && python3 manage.py migrate && python3 manage.py collectstatic",
+            "PIPENV_VENV_IN_PROJECT='1' pipenv sync && .venv/bin/python manage.py migrate",
         "dev":
-            "source ~/venv/yimteam/bin/activate && concurrently --kill-others --raw -n \"py,sass,wbpck\" -c \"gray,green.inverse,blue.inverse\" \"python3 manage.py runserver\" \"node-sass -rw static/_scss/ --output static/css/\" \"webpack --watch\"; exit 0",
+            "concurrently --kill-others --raw -n \"py,sass,wbpck\" -c \"gray,green.inverse,blue.inverse\" \".venv/bin/python manage.py runserver\" \"node-sass -rw static/_scss/ --output static/css/\" \"webpack --watch\"; exit 0",
         "deploy":
-            "/bin/bash -c \"source $HOME/venvs/yimteam1.11/bin/activate && pip install --upgrade -r requirements.txt && python3 manage.py migrate && python3 manage.py collectstatic --noinput && touch ../yimteam_uwsgi.ini\""
+            "/bin/bash -c \"PIPENV_VENV_IN_PROJECT='1' pipenv sync && .venv/bin/python manage.py migrate && .venv/bin/python manage.py collectstatic --noinput && touch ../yimteam_uwsgi.ini\""
     },
     "author": "Lukas Hermann",
     "license": "ISC",
