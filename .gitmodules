@@ -1,0 +1,3 @@
+[submodule "django-up-to-date"]
+	path = django-up-to-date
+	url = https://github.com/dgilge/django-up-to-date

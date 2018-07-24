@@ -26,7 +26,7 @@ config.read(os.path.join(BASE_DIR, 'config.ini'))
 SECRET_KEY = config.get('secrets','SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config.getboolean('debug','DEBUG')
+DEBUG = config.getboolean('environment','DEBUG')
 
 ALLOWED_HOSTS = tuple(config.get('addresses', 'ALLOWED_HOSTS').split())
 
