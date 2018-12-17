@@ -1,7 +1,11 @@
 var config = {
     volunteerAreas: {
-        Kongressleitung: {},
-        Küche: { kitchen: "Küche" },
+        Kongressleitung: {
+            registration: "Registrierung"
+        },
+        Küche: {
+            kitchen: "Küche"
+        },
         Logistik: {
             maintenance: "Sauberkeit",
             setup: "Aufbau",
@@ -10,10 +14,16 @@ var config = {
         Musik: {},
         Öffentlichkeitsarbeit: {},
         Outreach: {},
-        Programm: { ushers: "Saalordnung" },
-        Registrierung: { registration: "Registrierung" },
-        Sicherheit: { security: "Security", surroundings: "Außenbereich" },
-        Technik: { wsaudio: "Workshop Audio" },
+        Programm: {
+            ushers: "Saalordnung"
+        },
+        Sicherheit: {
+            security: "Security",
+            surroundings: "Außenbereich"
+        },
+        Technik: {
+            wsaudio: "Workshop Audio"
+        },
         "WS & Referenten": {},
         "YiM-Leben": {}
     }
@@ -174,7 +184,9 @@ Vue.component("volunteer-table", {
             list.sort(function(a, b) {
                 return a.lastname > b.lastname
                     ? 1
-                    : b.lastname > a.lastname ? -1 : 0;
+                    : b.lastname > a.lastname
+                        ? -1
+                        : 0;
             });
             return list;
         },
