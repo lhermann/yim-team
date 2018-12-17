@@ -5,23 +5,26 @@
     "main": "dist/index.html",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "migrate":
-            "PIPENV_VENV_IN_PROJECT='1' pipenv sync && .venv/bin/python manage.py migrate",
-        "dev":
-            "concurrently --kill-others --raw -n \"py,sass,wbpck\" -c \"gray,green.inverse,blue.inverse\" \".venv/bin/python manage.py runserver\" \"node-sass -rw static/_scss/ --output static/css/\" \"webpack --watch\"; exit 0",
-        "deploy":
-            "/bin/bash -c \"PIPENV_VENV_IN_PROJECT='1' pipenv sync && .venv/bin/python manage.py migrate && .venv/bin/python manage.py collectstatic --noinput && touch ../yimteam_uwsgi.ini\""
+        "dev:backend": "pipenv run python manage.py runserver 127.0.0.1:8005",
+        "dev:scss": "node-sass -rw static/_scss/ --output static/css/",
+        "dev:webpack": "webpack --watch",
+        "build:backend": "PIPENV_VENV_IN_PROJECT='1' pipenv sync && pipenv run python manage.py migrate && pipenv run python manage.py collectstatic --noinput && touch uwsgi.ini",
+        "build:scss": "node-sass -r static/_scss/ --output static/css/",
+        "build:webpack": "webpack -p",
+        "migrate": "PIPENV_VENV_IN_PROJECT='1' pipenv sync && .venv/bin/python manage.py migrate",
+        "dev": "concurrently --kill-others -n \"py,scss,wp\" -c \"gray,green.inverse,blue.inverse\" \"npm run dev:backend\" \"npm run dev:scss\" \"npm run dev:webpack\"; exit 0",
+        "build": "npm run build:scss && npm run build:webpack && npm run build:backend"
     },
     "author": "Lukas Hermann",
     "license": "ISC",
     "devDependencies": {
-        "concurrently": "^3.5.0",
-        "node-sass": "^4.5.3",
-        "vee-validate": "^2.0.0-beta.17",
-        "vue": "^2.5.3",
-        "webpack": "^3.8.1"
+        "concurrently": "^3.6.1",
+        "node-sass": "^4.11.0",
+        "vee-validate": "^2.1.4",
+        "vue": "^2.5.21",
+        "webpack": "^3.12.0"
     },
     "dependencies": {
-        "vuelidate": "^0.6.1"
+        "vuelidate": "^0.6.2"
     }
 }
