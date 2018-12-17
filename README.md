@@ -48,5 +48,6 @@ GIT_DIR=$HOME/git/$PROJECT.git
 git --work-tree=$WORK_TREE --git-dir=$GIT_DIR checkout -f
 cd $WORK_TREE && git --work-tree=$WORK_TREE --git-dir=$GIT_DIR submodule update --init
 python3 $WORK_TREE/django-up-to-date/build.py
+pipenv run python manage.py collectstatic --noinput
 touch $WORK_TREE/uwsgi.ini
 ```
