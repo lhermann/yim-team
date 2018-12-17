@@ -88,7 +88,6 @@ Vue.component("helfer-table", {
     props: ["items", "area", "label-preset", "free-admission"],
     methods: {
         addItem: function() {
-            console.log("add");
             var component = this;
             var item = {
                 email: _.trim(component.email),
@@ -185,8 +184,8 @@ Vue.component("volunteer-table", {
                 return a.lastname > b.lastname
                     ? 1
                     : b.lastname > a.lastname
-                        ? -1
-                        : 0;
+                    ? -1
+                    : 0;
             });
             return list;
         },

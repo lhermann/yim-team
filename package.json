@@ -7,13 +7,11 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "dev:backend": "pipenv run python manage.py runserver 127.0.0.1:8005",
         "dev:scss": "node-sass -rw static/_scss/ --output static/css/",
-        "dev:webpack": "webpack --watch",
         "build:backend": "PIPENV_VENV_IN_PROJECT='1' pipenv sync && pipenv run python manage.py migrate && pipenv run python manage.py collectstatic --noinput && touch uwsgi.ini",
         "build:scss": "node-sass -r static/_scss/ --output static/css/",
-        "build:webpack": "webpack -p",
         "migrate": "PIPENV_VENV_IN_PROJECT='1' pipenv sync && .venv/bin/python manage.py migrate",
-        "dev": "concurrently --kill-others -n \"py,scss,wp\" -c \"gray,green.inverse,blue.inverse\" \"npm run dev:backend\" \"npm run dev:scss\" \"npm run dev:webpack\"; exit 0",
-        "build": "npm run build:scss && npm run build:webpack && npm run build:backend"
+        "dev": "concurrently --kill-others -n \"py,scss\" -c \"green.inverse,blue.inverse\" \"npm run dev:backend\" \"npm run dev:scss\"; exit 0",
+        "build": "npm run build:scss && npm run build:backend"
     },
     "author": "Lukas Hermann",
     "license": "ISC",
