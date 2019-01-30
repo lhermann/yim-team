@@ -1,13 +1,13 @@
-Create new Python executable and install Python packages
-===============================
+# Create new Python executable and install Python packages
+
 `pipenv sync`
 
-Create config file
-=====================
+# Create config file
+
 Copy `config.example.ini` as `config.ini` and adjust the database values
 
-Development
-=======================
+# Development
+
 Migrate: `npm run migrate`
 
 Start dev server: `npm run dev`
@@ -17,8 +17,7 @@ Log in as:
     user: admin
     password: admin
 
-Deployment
-==========
+# Deployment
 
 `push` to the server repo.
 
@@ -35,8 +34,7 @@ I've read that you have to fetch/pull in case somebody else changed something. â
 
 More information at [stackoverflow](https://stackoverflow.com/questions/849308/pull-push-from-multiple-remote-locations) and [git-scm](https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes).
 
-Git `post-receive` hook
-=======================
+# Git `post-receive` hook
 
 (Just to have this documented somewhere in case it gets lost.)
 
@@ -50,5 +48,6 @@ GIT_DIR=$HOME/git/$PROJECT.git
 git --work-tree=$WORK_TREE --git-dir=$GIT_DIR checkout -f
 cd $WORK_TREE && git --work-tree=$WORK_TREE --git-dir=$GIT_DIR submodule update --init
 python3 $WORK_TREE/django-up-to-date/build.py
-touch $HOME/django-projects/yimteam_uwsgi.ini
+pipenv run python manage.py collectstatic --noinput
+touch $WORK_TREE/uwsgi.ini
 ```
