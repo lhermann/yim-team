@@ -63,7 +63,8 @@ class HelperViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsOwner,)
 
     def get_queryset(self):
-        return Helper.objects.filter(user_id=self.request.user.id)
+        qs = Helper.objects.filter(user_id=self.request.user.id).order_by('pk')
+        return qs
 
     def email_check(self, data, instance=None):
         """
