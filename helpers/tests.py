@@ -65,8 +65,12 @@ class AuthTests(TestCase):
         self.assertNotContains(r, 'Django REST framework')
 
 
-@override_settings(QUERY_WHITE_LIST='127.0.0.1')
+@override_settings(
+    QUERY_API_KEYS='test1234567890',
+    QUERY_WHITE_LIST=('127.0.0.1',),
+)
 class HelperAPITests(APITestCase):
+    maxDiff = None
     dict_new = {
         'id': 1,
         'email': 'new@example.com',
