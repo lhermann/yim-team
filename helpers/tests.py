@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import override_settings, TestCase
 from django.urls import reverse
 from rest_framework.test import APITestCase, APIClient
 from helpers import factories, models
@@ -64,6 +64,8 @@ class AuthTests(TestCase):
         self.assertContains(r, 'open-iconic-bootstrap.min.css')
         self.assertNotContains(r, 'Django REST framework')
 
+
+@override_settings(QUERY_WHITE_LIST='127.0.0.1')
 class HelperAPITests(APITestCase):
     dict_new = {
         'id': 1,
