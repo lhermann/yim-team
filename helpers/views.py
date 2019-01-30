@@ -12,8 +12,6 @@ from rest_framework.views import APIView
 from helpers.models import Helper
 from helpers import permissions, serializers
 from helpers.authentications import TokenAuthentication
-# Added by Lukas
-from pprint import pprint
 
 @login_required
 def home_view(request):
@@ -50,8 +48,6 @@ class RegisterSeatView(APIView):
                 # query the reg_id
                 # 'registration_iweekendID': value,
             })
-
-        pprint(post_fields);
 
         response = requests.post(
             url='https://registerseat.com/ws.php',
