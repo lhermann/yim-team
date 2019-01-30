@@ -170,6 +170,7 @@ class HelperAPITests(APITestCase):
         factories.HelperFactory()
 
         # Only own helpers should be included
+        r = self.client.get(reverse('helper-list'))
         self.assertEqual(r.json(), [dict_new, dict_registered])
 
     def test_query_get_detail(self):
@@ -415,6 +416,7 @@ class HelperAPITests(APITestCase):
         self.assertEqual(r.status_code, 200)
 
     def test_query_update(self):
+        pk_1 = self.helper_new.pk
         # Second entry with same email
         helper = factories.HelperFactory(email='new@example.com')
 
@@ -467,7 +469,7 @@ class HelperAPITests(APITestCase):
             format='json',
         )
         self.assertEqual(r.status_code, 200)
-        exists = models.Helper.objects.filter(pk=1
+        exists = models.Helper.objects.filter(pk=pk_1
                 ).filter(food_privilege=False).exists()
         self.assertFalse(exists)
         # Free admission
@@ -478,7 +480,7 @@ class HelperAPITests(APITestCase):
             format='json',
         )
         self.assertEqual(r.status_code, 200)
-        exists = models.Helper.objects.filter(pk=1
+        exists = models.Helper.objects.filter(pk=pk_1
                 ).filter(free_admission=False).exists()
         self.assertFalse(exists)
         # Above 35
@@ -489,7 +491,7 @@ class HelperAPITests(APITestCase):
             format='json',
         )
         self.assertEqual(r.status_code, 200)
-        exists = models.Helper.objects.filter(pk=1
+        exists = models.Helper.objects.filter(pk=pk_1
                 ).filter(above_35=False).exists()
         self.assertFalse(exists)
         # First name
@@ -500,7 +502,7 @@ class HelperAPITests(APITestCase):
             format='json',
         )
         self.assertEqual(r.status_code, 200)
-        exists = models.Helper.objects.filter(pk=1
+        exists = models.Helper.objects.filter(pk=pk_1
                 ).filter(first_name='Peter').exists()
         self.assertTrue(exists)
         # Last name
@@ -511,7 +513,7 @@ class HelperAPITests(APITestCase):
             format='json',
         )
         self.assertEqual(r.status_code, 200)
-        exists = models.Helper.objects.filter(pk=1
+        exists = models.Helper.objects.filter(pk=pk_1
                 ).filter(last_name='Smith').exists()
         self.assertTrue(exists)
         # Age
@@ -564,24 +566,27 @@ class HelperAPITests(APITestCase):
 
     def test_ak_delete(self):
         self.client.force_login(self.user)
-        r = self.client.delete(reverse('helper-detail', args=(1,)))
+        pk_1 = self.helper_new.pk
+        pk_2 = self.helper_registered.pk
+        r = self.client.delete(reverse('helper-detail', args=(pk_1,)))
         self.assertEqual(r.status_code, 204)
-        deleted = not models.Helper.objects.filter(pk=1).exists()
+        deleted = not models.Helper.objects.filter(pk=pk_1).exists()
         self.assertTrue(deleted)
         # Helper registered already
-        r = self.client.delete(reverse('helper-detail', args=(2,)))
+        r = self.client.delete(reverse('helper-detail', args=(pk_2,)))
         self.assertEqual(r.status_code, 400)
-        deleted = not models.Helper.objects.filter(pk=2).exists()
+        deleted = not models.Helper.objects.filter(pk=pk_2).exists()
         self.assertFalse(deleted)
 
     def test_query_delete(self):
+        pk_1 = self.helper_new.pk
         # Not allowed
         r = self.client.delete(
-            reverse('query-detail', args=(1,)),
+            reverse('query-detail', args=(pk_1,)),
             **self.api_key,
         )
         self.assertEqual(r.status_code, 405)
-        deleted = not models.Helper.objects.filter(pk=1).exists()
+        deleted = not models.Helper.objects.filter(pk=pk_1).exists()
         self.assertFalse(deleted)
 
 class CSRFTests(APITestCase):
