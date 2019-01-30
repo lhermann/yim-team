@@ -21,7 +21,7 @@ class WhiteListAndAPIKey(permissions.BasePermission):
         api_key = request.META.get('HTTP_X_HTTP_API_KEY')
         white_list = settings.QUERY_WHITE_LIST
         valid_api_keys = settings.QUERY_API_KEYS
-        if ip in white_list and api_key in valid_api_keys:
+        if ip and api_key and ip in white_list and api_key in valid_api_keys:
             return True
         if request.user.is_superuser:
             return True
